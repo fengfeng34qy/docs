@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+}
+.flex {
+    display: flex;
+    align-items: center;
+}
+.flex[align="center"] {
+    align-items: center;
+}
+div[text-align="center"] {
+    text-align: center;
+}
+div[text-align="left"] {
+    text-align: left;
+}
