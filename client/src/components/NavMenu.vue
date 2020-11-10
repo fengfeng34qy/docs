@@ -7,9 +7,7 @@
       background-color="#fff"
       text-color="#000"
       active-text-color="#000">
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-menu-item index="2">消息中心</el-menu-item>
-      <el-menu-item index="3">订单管理</el-menu-item>
+      <el-menu-item v-for="(item, index) in data" :key="index" :index="item.language" style="width:100px;">{{item.name}}</el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -18,8 +16,14 @@ export default {
   name: 'NavMenu',
   data () {
     return {
-      activeIndex: '1'
+      activeIndex: this.data[0].language
     }
+  },
+  props: {
+    data: Array
+  },
+  mounted () {
+    console.log(this.data)
   },
   methods: {
     handleSelect (key, keyPath) {

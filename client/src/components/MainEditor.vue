@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-editor">
     <mavon-editor
       class="mavon-editor"
       :fontSize="'19px'"
@@ -60,13 +60,17 @@ export default {
   },
   mounted () {
     axios.get('http://www.sunfengfeng.com/markdownfiles/README.md').then(res => {
-      console.log(res)
       this.value = res.data
     })
   }
 }
 </script>
 <style scoped>
+.main-editor {
+  height: calc(100vh - 60px);
+  overflow: auto;
+  box-sizing: border-box;
+}
 .mavon-editor {
   width: 100%;
   height: 100%;

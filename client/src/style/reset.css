@@ -8,9 +8,21 @@ body {
 .flex[align="center"] {
     align-items: center;
 }
+.flex[justify-content="flex-end"] {
+    justify-content: flex-end;
+}
+.flex[justify-content="space-between"] {
+    justify-content: space-between;
+}
+.flex[justify-content="center"] {
+    justify-content: center;
+}
 div[text-align="center"] {
     text-align: center;
 }
 div[text-align="left"] {
     text-align: left;
+}
+.cursor {
+    cursor: pointer;
 }

@@ -3,26 +3,24 @@
     <el-container>
       <el-header class="header">
         <el-row class="header-box" type="flex">
-          <el-col :span="12">
+          <el-col :span="4">
             <div class="" text-align="left">
               <div>孙锋锋的文档</div>
             </div>
           </el-col>
-          <el-col :span="12">
-            <el-row class="header-right" type="flex" align="center">
-              <el-col :span="12" align="right">
-                <SearchInput />
-              </el-col>
-              <el-col :span="12">
-                <NavMenu />
-              </el-col>
-            </el-row>
+          <el-col :span="20">
+            <div class="flex" justify-content="flex-end">
+              <SearchInput />
+              <NavMenu :data="navDataList"/>
+              <Login />
+            </div>
           </el-col>
         </el-row>
       </el-header>
       <el-main class="main">
         <el-row type="flex" style="min-height:92vh;">
           <el-col :span="8" style="border-right:1px solid #eaecef;">
+            <MainArticleList :data="articleList"/>
             <MainPagination />
           </el-col>
           <el-col :span="16">
@@ -37,25 +35,40 @@
 
 <script>
 import NavMenu from './components/NavMenu'
+import Login from './components/Login'
 import SearchInput from './components/SearchInput'
 import MainEditor from './components/MainEditor'
 import MainPagination from './components/MainPagination'
+import MainArticleList from './components/MainArticleList'
 
 export default {
   name: 'App',
   data () {
     return {
-      list: [
+      ruleForm: {
+        pass: '',
+        user: ''
+      },
+      navDataList: [
+        { name: 'JavaScript', language: 'js' },
+        { name: 'Java', language: 'java' },
+        { name: 'NodeJs', language: 'nodeJs' }
+      ],
+      articleList: [
         {
-          path: '',
-          children: [
-            {
-              path: 'dashboard',
-              component: () => import('./views/login/index'),
-              name: 'Dashboard',
-              meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
-            }
-          ]
+          title: '标题1'
+        },
+        {
+          title: '标题1'
+        },
+        {
+          title: '标题1'
+        },
+        {
+          title: '标题1'
+        },
+        {
+          title: '标题1'
         }
       ]
     }
@@ -64,10 +77,16 @@ export default {
     SearchInput,
     NavMenu,
     MainEditor,
-    MainPagination
+    Login,
+    MainPagination,
+    MainArticleList
   },
   mounted () {},
-  methods: {}
+  methods: {
+    submitForm () {
+      console.log('a')
+    }
+  }
 }
 </script>
 
@@ -86,6 +105,7 @@ export default {
 }
 .header {
   padding: 0;
+  box-sizing: border-box;
 }
 .header-box {
   align-items: center;
@@ -99,6 +119,6 @@ export default {
   border: none !important;
 }
 .main {
-  padding: 0 20px;
+  padding: 0;
 }
 </style>
