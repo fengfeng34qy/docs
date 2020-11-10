@@ -1,21 +1,22 @@
 <template>
-  <div class="main-editor">
+  <div class="main-editor2">
     <mavon-editor
       class="mavon-editor"
-      :fontSize="'19px'"
+      :fontSize="'14px'"
       :toolbars="markdownOption"
       :navigation="false"
       :transition="true"
-      :boxShadow="true"
+      :boxShadow="false"
       :codeStyle="codeStyle"
-      :toolbarsFlag="false"
+      :toolbarsFlag="toolbarsFlag"
       :ishljs="true" :bold="true"
       :shortCut="true"
       :editable="true"
-      :subfield="false"
+      :subfield="subfield"
       :defaultOpen="'preview'"
       :tabSize="4"
       :externalLink="externalLink"
+      @save="onSave"
       v-model="value"/>
   </div>
 </template>
@@ -58,10 +59,19 @@ export default {
       }
     }
   },
+  props: {
+    subfield: Boolean,
+    toolbarsFlag: Boolean
+  },
   mounted () {
+    console.log(this.subfield)
     axios.get('http://www.sunfengfeng.com/markdownfiles/README.md').then(res => {
       this.value = res.data
     })
+  },
+  methods: {
+    onSave (data) {
+    }
   }
 }
 </script>

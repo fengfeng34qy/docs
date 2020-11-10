@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <el-button type="primary" @click="onEditor" style="position:absolute;right:20px;top:80px;z-index:10000;">{{editorText}}</el-button>
     <el-container>
       <el-header class="header">
         <el-row class="header-box" type="flex">
@@ -18,15 +19,15 @@
         </el-row>
       </el-header>
       <el-main class="main">
-        <el-row type="flex" style="min-height:92vh;">
-          <el-col :span="8" style="border-right:1px solid #eaecef;">
+        <div class="flex">
+          <div v-if="showSlider" flex="2" style="flex:2;">
             <MainArticleList :data="articleList"/>
             <MainPagination />
-          </el-col>
-          <el-col :span="16">
-            <MainEditor />
-          </el-col>
-        </el-row>
+          </div>
+          <div class="editor-box" flex="3" style="flex:5;">
+            <MainEditor :subfield="subfield" :toolbarsFlag="toolbarsFlag" />
+          </div>
+        </div>
       </el-main>
       <!-- <el-footer></el-footer> -->
     </el-container>
@@ -45,6 +46,7 @@ export default {
   name: 'App',
   data () {
     return {
+      subfield: false,
       ruleForm: {
         pass: '',
         user: ''
@@ -81,10 +83,28 @@ export default {
     MainPagination,
     MainArticleList
   },
+  computed: {
+    editorText () {
+      if (!this.subfield) {
+        return '编辑'
+      } else {
+        return '保存'
+      }
+    },
+    showSlider () {
+      return this.subfield !== true
+    },
+    toolbarsFlag () {
+      return this.subfield === true
+    }
+  },
   mounted () {},
   methods: {
     submitForm () {
       console.log('a')
+    },
+    onEditor () {
+      this.subfield = !this.subfield
     }
   }
 }
@@ -106,17 +126,25 @@ export default {
 .header {
   padding: 0;
   box-sizing: border-box;
+  max-height: 60px;
+  border-bottom: 1px solid #eaecef;
 }
 .header-box {
   align-items: center;
-  border-bottom: 1px solid #eaecef;
+  /* border-bottom: 1px solid #eaecef; */
   box-sizing: border-box;
+  padding: 0 25px;
 }
 .header-right {
   align-items: center;
 }
 .header-right ul {
   border: none !important;
+}
+.editor-box {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height:calc(100vh - 60px);
 }
 .main {
   padding: 0;
