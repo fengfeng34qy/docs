@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <el-button type="primary" @click="onEditor" style="position:absolute;right:20px;top:80px;z-index:10000;">{{editorText}}</el-button>
+    <div class="editorSaveBtn">
+      <el-button class="editor-btn" type="primary" @click="onEditor">{{editorText}}</el-button>
+      <el-button class="back-btn" v-if="toolbarsFlag" @click="onEditor">返回</el-button>
+    </div>
     <el-container>
       <el-header class="header">
         <el-row class="header-box" type="flex">
@@ -143,10 +146,29 @@ export default {
 }
 .editor-box {
   overflow-y: auto;
-  overflow-x: hidden;
   height:calc(100vh - 60px);
 }
 .main {
   padding: 0;
+}
+.editorSaveBtn {
+  position: absolute;
+  width: 156px;
+  right:58px;
+  top:116px;
+  text-align: left;
+  z-index:10000;
+}
+.editor-btn {
+  opacity: 0.5;
+}
+.editor-btn:hover {
+  opacity: 1;
+}
+.back-btn {
+  opacity: 0.5;
+}
+.back-btn:hover {
+  opacity: 1;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-editor2">
+  <div>
     <mavon-editor
       class="mavon-editor"
       :fontSize="'14px'"
@@ -84,5 +84,6 @@ export default {
 .mavon-editor {
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
 }
 </style>
