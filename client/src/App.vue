@@ -22,13 +22,13 @@
         </el-row>
       </el-header>
       <el-main class="main">
-        <div class="flex">
-          <div v-if="showSlider" flex="2" style="flex:2;">
-            <MainArticleList :data="articleList"/>
+        <div class="flex" align-items="flex-start">
+          <div v-if="showSlider" flex="2" style="width:28%">
+            <MainArticleList :data="articleList" @create-btn="onCreate" />
             <MainPagination />
           </div>
-          <div class="editor-box" flex="3" style="flex:5;">
-            <MainEditor :subfield="subfield" :toolbarsFlag="toolbarsFlag" />
+          <div class="editor-box" flex="3" style="width:72%">
+            <MainEditor :value="value" :subfield="subfield" :toolbarsFlag="toolbarsFlag" />
           </div>
         </div>
       </el-main>
@@ -44,11 +44,13 @@ import SearchInput from './components/SearchInput'
 import MainEditor from './components/MainEditor'
 import MainPagination from './components/MainPagination'
 import MainArticleList from './components/MainArticleList'
+import axios from 'axios'
 
 export default {
   name: 'App',
   data () {
     return {
+      value: '',
       subfield: false,
       ruleForm: {
         pass: '',
@@ -61,19 +63,19 @@ export default {
       ],
       articleList: [
         {
-          title: '标题1'
+          title: '标题标题标题标题标题标题标题标题标题标题标题标题'
         },
         {
-          title: '标题1'
+          title: '标题标题标题标题标题标题标题标题标题标题标题标题'
         },
         {
-          title: '标题1'
+          title: '标题标题标题标题标题标题标题标题标题标题标题标题'
         },
         {
-          title: '标题1'
+          title: '标题标题标题标题标题标题标题标题标题标题标题标题'
         },
         {
-          title: '标题1'
+          title: '标题标题标题标题标题标题标题标题标题标题标题标题'
         }
       ]
     }
@@ -101,8 +103,16 @@ export default {
       return this.subfield === true
     }
   },
-  mounted () {},
+  mounted () {
+    axios.get('http://www.sunfengfeng.com/markdownfiles/demo.md').then(res => {
+      this.value = res.data
+    })
+  },
   methods: {
+    onCreate () {
+      this.value = ''
+      this.subfield = !this.subfield
+    },
     submitForm () {
       console.log('a')
     },

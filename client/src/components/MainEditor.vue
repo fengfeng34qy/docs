@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div>
+      <el-input placeholder="请输入内容" v-model="input1">
+        <template slot="prepend">文章标题</template>
+      </el-input>
+    </div>
     <mavon-editor
       class="mavon-editor"
       :fontSize="'14px'"
@@ -17,19 +22,20 @@
       :tabSize="4"
       :externalLink="externalLink"
       @save="onSave"
-      v-model="value"/>
+      :value="value"
+    />
   </div>
 </template>
 <script>
 import toolbars from '../config/toolbars'
-import axios from 'axios'
 
 export default {
   name: 'MainEditor',
   data () {
     return {
-      value: '',
-      codeStyle: 'atelier-forest-light',
+      // value: '',
+      // codeStyle: 'atelier-forest-light',
+      codeStyle: 'github',
       markdownOption: toolbars,
       externalLink: {
         // markdown_css: function () {
@@ -61,14 +67,10 @@ export default {
   },
   props: {
     subfield: Boolean,
-    toolbarsFlag: Boolean
+    toolbarsFlag: Boolean,
+    value: String
   },
-  mounted () {
-    console.log(this.subfield)
-    axios.get('http://www.sunfengfeng.com/markdownfiles/README.md').then(res => {
-      this.value = res.data
-    })
-  },
+  mounted () {},
   methods: {
     onSave (data) {
     }
@@ -83,7 +85,7 @@ export default {
 }
 .mavon-editor {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 80px);
   box-sizing: border-box;
 }
 </style>
