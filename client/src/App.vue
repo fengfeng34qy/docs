@@ -110,8 +110,9 @@ export default {
   },
   methods: {
     onCreate () {
-      this.value = ''
-      this.subfield = !this.subfield
+      // this.value = ''
+      // this.subfield = !this.subfield
+      this.$router.push({path: '/CreateArticle'})
     },
     submitForm () {
       console.log('a')

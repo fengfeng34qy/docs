@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div>
-      <el-input placeholder="请输入内容" v-model="input1">
-        <template slot="prepend">文章标题</template>
-      </el-input>
-    </div>
     <mavon-editor
       class="mavon-editor"
       :fontSize="'14px'"
