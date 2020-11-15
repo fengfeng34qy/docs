@@ -77,8 +77,12 @@ div[text-align="center"] {
 div[text-align="left"] {
     text-align: left;
 }
-.cursor {
+.pointer {
     cursor: pointer;
+}
+/* 文本下划线 */
+.underline {
+    text-decoration: underline;
 }
 /* 超出部分显示省略号 */
 .div[ellipsis='true'] {
