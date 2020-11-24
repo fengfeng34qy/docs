@@ -7,6 +7,7 @@ import VueHtml5Editor from 'vue-html5-editor'
 import html5EditorConfig from './config/html5-editor-config'
 import ElementUI from 'element-ui'
 import mavonEditor from 'mavon-editor'
+import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'mavon-editor/dist/css/index.css'
 import './style/lib/font-awesome-4.7.0/css/font-awesome.css'
@@ -21,6 +22,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

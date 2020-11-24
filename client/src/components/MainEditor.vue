@@ -4,7 +4,7 @@
       class="mavon-editor"
       :fontSize="'14px'"
       :toolbars="markdownOption"
-      :navigation="false"
+      :navigation="navigation"
       :transition="true"
       :boxShadow="false"
       :codeStyle="codeStyle"
@@ -63,6 +63,7 @@ export default {
   props: {
     subfield: Boolean,
     toolbarsFlag: Boolean,
+    navigation: Boolean,
     value: String
   },
   mounted () {},

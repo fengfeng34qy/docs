@@ -28,5 +28,20 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #e5e5e5;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #b7b7b7;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover,::-webkit-scrollbar-thumb:active {
+  background-color: #a1a1a1;
+}
+::-webkit-scrollbar-thumb-track {
+  box-shadow: 0 0 0px #808080 inset;
+  -webkit-box-shadow: 0 0 0px #808080 inset;
+}
 </style>

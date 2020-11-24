@@ -6,11 +6,12 @@
         <el-button type="primary" @click="onCreate">创建文章</el-button>
       </div>
     </div>
-    <div class="flex article-list-box" justify-content="space-between" align="left" v-for="(item, index) in data" :key="index" :title="item.title">
-      <div align="right" align-items="center" style="width:15%;font-size:14px;">2020/10/10</div>
-      <div class="ellipsis pointer article-title" align-items="center" style="width:70%;">{{item.title}}</div>
-      <div><i class="el-icon-arrow-right"></i></div>
-      <!-- <div class="flex tag" align-items="center"><el-tag :type="item.tag.type" :color="item.tag.color" :hit="true" style="width:100%;text-align:center;">{{item.tag.label}}</el-tag></div> -->
+    <div class="article-list-wrap">
+      <div class="flex article-list-box pointer" justify-content="space-between" align="left" v-for="(item, index) in data" :key="index" :title="item.title">
+        <div align="right" align-items="center" style="width:15%;font-size:14px;">2020/10/10</div>
+        <div class="ellipsis article-title" align-items="center" style="width:70%;">{{item.title}}</div>
+        <div><i class="el-icon-arrow-right"></i></div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,10 +40,14 @@ export default {
 .box > div {
   width: 100%;
 }
+.article-list-wrap {
+  min-height: 460px;
+}
 .article-list-box {
   /* border-bottom: 1px solid #ccc; */
   box-sizing: border-box;
   transition: all .3s;
+  height: 46px;
 }
 .article-list-box:hover {
   background: #eaecef;

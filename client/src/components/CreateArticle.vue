@@ -1,8 +1,18 @@
 <template>
   <div class="create-article">
     <div class="create-title">创建文章</div>
+    <div class="mode-wrap" align="left">
+      <div class="mode-box">
+        <el-switch
+          v-model="mode"
+          active-text="富文本模式"
+          inactive-color="#13ce66"
+          inactive-text="markdown模式">
+        </el-switch>
+      </div>
+    </div>
     <div class="mavon-editor-wrap">
-      <div class="mavon-editor-box" v-if="true">
+      <div class="mavon-editor-box" v-if="!mode">
         <mavon-editor
           class="mavon-editor"
           :fontSize="'14px'"
@@ -37,6 +47,7 @@ export default {
   name: 'CreateArticle',
   data () {
     return {
+      mode: false,
       value: '',
       content: '',
       codeStyle: 'github',
@@ -54,10 +65,20 @@ export default {
 <style scoped>
 .create-article {
   width: 100%;
-  padding-bottom: 200px;
+  /* padding-bottom: 200px; */
 }
 .create-title {
-  padding: 100px 0;
+  padding: 50px 0;
+}
+.mode-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+}
+.mode-box {
+  width: 75%;
 }
 .mavon-editor-wrap {
   display: flex;
@@ -66,5 +87,8 @@ export default {
 }
 .mavon-editor-box {
   width: 75%;
+}
+.mavon-editor {
+  height: 700px;
 }
 </style>

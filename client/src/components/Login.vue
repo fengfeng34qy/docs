@@ -6,7 +6,7 @@
       <el-button type="text" @click="dialogRegisterVisible = true">注册</el-button>
     </div>
     <div class="flex" v-else>
-      <el-avatar class="cursor" title="管理员" :size="40" src="http://www.sunfengfeng.com/images/face/10.png"></el-avatar>
+      <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="http://www.sunfengfeng.com/images/face/10.png"></el-avatar>
       <div style="margin:0 6px;">|</div>
       <el-button type="text" @click="dialogRegisterVisible = true">退出</el-button>
     </div>

@@ -5,22 +5,6 @@
       <el-button class="back-btn" v-if="toolbarsFlag" @click="onEditor">返回</el-button>
     </div>
     <el-container>
-      <el-header class="header">
-        <el-row class="header-box" type="flex">
-          <el-col :span="4">
-            <div class="" text-align="left">
-              <div>孙锋锋的文档</div>
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <div class="flex" justify-content="flex-end">
-              <SearchInput />
-              <NavMenu :data="navDataList"/>
-              <Login />
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
       <el-main class="main">
         <div class="flex" align-items="flex-start">
           <div v-if="showSlider" flex="2" style="width:28%">
@@ -28,7 +12,12 @@
             <MainPagination />
           </div>
           <div class="editor-box" flex="3" style="width:72%">
-            <MainEditor :value="value" :subfield="subfield" :toolbarsFlag="toolbarsFlag" />
+            <MainEditor
+              :value="value"
+              :subfield="subfield"
+              :toolbarsFlag="toolbarsFlag"
+              :navigation="navFlg"
+            />
           </div>
         </div>
       </el-main>
@@ -49,6 +38,7 @@ export default {
   name: 'home',
   data () {
     return {
+      navFlg: false,
       value: '',
       subfield: false,
       ruleForm: {
@@ -61,33 +51,6 @@ export default {
         { name: 'NodeJs', language: 'nodeJs' }
       ],
       articleList: [
-        {
-          title: '标题标题标题标题标题标题标题标题标题标题标题标题',
-          date: '2020/10/10',
-          tag: {
-            label: 'vue',
-            color: '#fff',
-            type: 'success'
-          }
-        },
-        {
-          title: '标题标题标题标题标题标题标题标题标题标题标题标题',
-          date: '2020/10/10',
-          tag: {
-            label: 'javascript',
-            color: '#fff',
-            type: 'danger'
-          }
-        },
-        {
-          title: '标题标题标题标题标题标题标题标题标题标题标题标题',
-          date: '2020/10/10',
-          tag: {
-            label: 'node',
-            color: '#fff',
-            type: 'warning'
-          }
-        },
         {
           title: '标题标题标题标题标题标题标题标题标题标题标题标题',
           date: '2020/10/10',
@@ -126,17 +89,23 @@ export default {
   mounted () {
     axios.get('http://www.sunfengfeng.com/markdownfiles/demo.md').then(res => {
       this.value = res.data
+    }, err => {
+      this.$message.error(err.message)
     })
   },
   methods: {
     onCreate () {
-      this.$router.push({path: '/CreateArticle'})
+      this.$router.push({path: '/create'})
     },
     submitForm () {
       console.log('a')
     },
     onEditor () {
       this.subfield = !this.subfield
+      if (this.subfield) {
+        this.navFlg = false
+      }
+      console.log(this.navFlg)
     }
   }
 }
@@ -155,7 +124,6 @@ export default {
 }
 .header-box {
   align-items: center;
-  /* border-bottom: 1px solid #eaecef; */
   box-sizing: border-box;
   padding: 0 25px;
 }
