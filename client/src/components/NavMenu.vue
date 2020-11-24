@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex" style="margin-left:16px;">
     <el-menu
       :default-active="activeIndex"
       mode="horizontal"
@@ -9,6 +9,9 @@
       active-text-color="#000">
       <el-menu-item v-for="(item, index) in data" :key="index" :index="item.language" style="width:100px;">{{item.name}}</el-menu-item>
     </el-menu>
+    <div class="icon-wrap pointer">
+      <i class="el-icon-plus"></i>
+    </div>
   </div>
 </template>
 <script>
@@ -33,5 +36,13 @@ export default {
 }
 </script>
 <style scoped>
-
+.icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  width: 60px;
+  box-sizing: border-box;
+  /* box-shadow: 0 0 6px 2px #ccc inset; */
+}
 </style>

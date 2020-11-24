@@ -2,6 +2,16 @@
   <div class="create-article">
     <div class="create-title">创建文章</div>
     <div class="mode-wrap" align="left">
+      <div class="title-box">
+        <el-input placeholder="请输入内容" v-model="title">
+          <template slot="prepend">标题</template>
+        </el-input>
+      </div>
+      <div class="mark-box">
+        <el-input placeholder="可不填" v-model="mark">
+          <template slot="prepend">标签</template>
+        </el-input>
+      </div>
       <div class="mode-box">
         <el-switch
           v-model="mode"
@@ -47,6 +57,8 @@ export default {
   name: 'CreateArticle',
   data () {
     return {
+      title: '',
+      mark: '',
       mode: false,
       value: '',
       content: '',
@@ -68,17 +80,20 @@ export default {
   /* padding-bottom: 200px; */
 }
 .create-title {
-  padding: 50px 0;
+  font-size: 24px;
+  padding: 6px 0;
+  font-weight: 500;
 }
 .mode-wrap {
+  flex-direction: column;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 36px;
 }
-.mode-box {
+.title-box, .mark-box, .mode-box {
   width: 75%;
+  padding: 6px 0;
 }
 .mavon-editor-wrap {
   display: flex;
@@ -89,6 +104,6 @@ export default {
   width: 75%;
 }
 .mavon-editor {
-  height: 700px;
+  height: 680px;
 }
 </style>
