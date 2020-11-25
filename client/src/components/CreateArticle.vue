@@ -2,15 +2,27 @@
   <div class="create-article">
     <div class="create-title">创建文章</div>
     <div class="mode-wrap" align="left">
-      <div class="title-box">
-        <el-input placeholder="请输入内容" v-model="title">
-          <template slot="prepend">标题</template>
-        </el-input>
-      </div>
-      <div class="mark-box">
-        <el-input placeholder="可不填" v-model="mark">
-          <template slot="prepend">标签</template>
-        </el-input>
+      <div class="from-box">
+        <div class="title-box">
+          <el-input placeholder="请输入文章标题" v-model="title">
+            <template slot="prepend">标题</template>
+          </el-input>
+        </div>
+        <div class="mark-box">
+          <el-select v-model="language" placeholder="请选择分类">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="mark-box">
+          <el-input placeholder="可不填" v-model="mark">
+            <template slot="prepend">标签</template>
+          </el-input>
+        </div>
       </div>
       <div class="mode-box">
         <el-switch
@@ -22,7 +34,7 @@
       </div>
     </div>
     <div class="mavon-editor-wrap">
-      <div class="mavon-editor-box" v-if="!mode">
+      <div class="mavon-editor-box" v-show="!mode">
         <mavon-editor
           class="mavon-editor"
           :fontSize="'14px'"
@@ -43,7 +55,7 @@
           :value="value"
         />
       </div>
-      <div v-else class="mavon-editor-box">
+      <div v-show="mode" class="mavon-editor-box">
         <vue-html5-editor :content="content" :height="500"></vue-html5-editor>
       </div>
     </div>
@@ -58,7 +70,14 @@ export default {
   data () {
     return {
       title: '',
+      language: '',
       mark: '',
+      options: [
+        {
+          value: '选项1',
+          label: '龙须面'
+        }
+      ],
       mode: false,
       value: '',
       content: '',
@@ -84,6 +103,9 @@ export default {
   padding: 6px 0;
   font-weight: 500;
 }
+.mark-box, .title-box {
+  padding-right: 20px;
+}
 .mode-wrap {
   flex-direction: column;
   width: 100%;
@@ -91,9 +113,14 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.title-box, .mark-box, .mode-box {
+.from-box {
   width: 75%;
-  padding: 6px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+.mode-box {
+  width: 75%;
+  padding: 10px 0;
 }
 .mavon-editor-wrap {
   display: flex;

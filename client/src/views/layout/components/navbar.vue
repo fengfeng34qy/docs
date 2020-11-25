@@ -12,7 +12,7 @@
         <el-col :span="20">
           <div class="flex" justify-content="flex-end">
             <SearchInput v-show="isShow" />
-            <NavMenu v-show="isShow" :data="navDataList" />
+            <NavMenu v-show="isShow" :data="languages" />
             <Login />
           </div>
         </el-col>
@@ -33,6 +33,9 @@ export default {
     Login
   },
   computed: {
+    languages () {
+      return this.$store.state.languages
+    },
     isShow () {
       console.log(this.$route.fullPath)
       if (this.$route.fullPath === '/') {
@@ -43,13 +46,7 @@ export default {
     }
   },
   data () {
-    return {
-      navDataList: [
-        { name: 'JavaScript', language: 'js' },
-        { name: 'Java', language: 'java' },
-        { name: 'NodeJs', language: 'nodeJs' }
-      ]
-    }
+    return {}
   }
 }
 </script>

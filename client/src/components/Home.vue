@@ -40,27 +40,7 @@ export default {
     return {
       navFlg: false,
       value: '',
-      subfield: false,
-      ruleForm: {
-        pass: '',
-        user: ''
-      },
-      navDataList: [
-        { name: 'JavaScript', language: 'js' },
-        { name: 'Java', language: 'java' },
-        { name: 'NodeJs', language: 'nodeJs' }
-      ],
-      articleList: [
-        {
-          title: '标题标题标题标题标题标题标题标题标题标题标题标题',
-          date: '2020/10/10',
-          tag: {
-            label: 'css',
-            color: '#fff',
-            type: 'info'
-          }
-        }
-      ]
+      subfield: false
     }
   },
   components: {
@@ -72,6 +52,9 @@ export default {
     MainArticleList
   },
   computed: {
+    articleList () {
+      return this.$store.state.articleList
+    },
     editorText () {
       if (!this.subfield) {
         return '编辑'
