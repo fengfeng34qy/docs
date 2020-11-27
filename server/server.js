@@ -2,6 +2,8 @@ const Koa = require('koa')
 const fs = require('fs')
 const route = require('koa-route')
 const cors = require('koa2-cors')
+const mysql = require('./utils/query')
+// let mysql = require('./utils/create-connection')
 
 const app = new Koa()
 
@@ -25,10 +27,14 @@ app.use(route.post('/post', (ctx) => {
 }))
 
 app.use(async ctx => {
-    
+    let data = await mysql.query(`SELECT * FROM article`)
+    console.log(data)
     console.log(ctx)
     ctx.response.type = 'html'
-    ctx.response.body = fs.createReadStream('./home/index.html')
+    // ctx.response.body = fs.createReadStream('./home/index.html')
+    ctx.body = {
+        data: data
+    }
     
 })
 
