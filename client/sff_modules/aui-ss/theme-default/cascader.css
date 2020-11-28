@@ -1,0 +1,159 @@
+.cascader-page * {
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+}
+
+.cascader-page li {
+  list-style: none;
+}
+
+.cascader-page {
+  z-index: 200;
+  width: 900px;
+  /* height: 610px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -450px;
+  margin-top: -340px;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.cascader-page .header {
+  position: relative;
+  line-height: 50px;
+  color: #616161;
+  text-align: center;
+  border-bottom: 1px solid #DCD2C0;
+}
+
+.cascader-page .close-icon {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 16px;
+  content: url('./images/cascader/cascaderClose.png');
+}
+
+.cascader-page .content {
+  padding: 0px 40px 40px 40px;
+}
+
+.cascader-page .content-title {
+  color: #616161;
+  line-height: 60px;
+  margin-bottom: 10px;
+}
+
+.cascader-page .tabList{
+  position: relative;
+  z-index: auto;
+  height: 54px;
+}
+
+.cascader-page .tab-wrapper {
+  position: relative;
+  z-index: auto;
+  display: inline-block;
+  border: 1px solid #DDDDDD;
+  border-bottom: 0;
+  margin-right: 10px;
+  background: #fff;
+}
+
+.cascader-page .tab-wrapper-active {
+  z-index: 203;
+  border: 4px solid #F27948;
+  border-bottom: 0;
+}
+
+.cascader-page .tab {
+  display: inline-block;
+  min-width: 60px;
+  height: 50px;
+  line-height: 48px;
+  color: #616161;
+  border: 3px solid transparent;
+  border-bottom: 0;
+  padding-left: 16px;
+  padding-right: 56px;
+  background: #fff;
+}
+
+.cascader-page .tab-active {
+  z-index: 203;
+  border: 0;
+}
+
+.cascader-page .triangle {
+  position: absolute;
+  top: 22px;
+  right: 16px;
+  border-top: 8px solid #999999;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+.cascader-page .triangle-active {
+  top: 19px;
+  right: 13px;
+}
+
+.cascader-page .panel {
+  position: relative;
+  z-index: 202;
+  overflow: hidden;
+  width: 818px;
+  min-height: 350px;
+  max-height: 500px;
+  overflow: auto;
+  border: 1px solid #E8E8E8;
+  border-top: 4px solid #F27948;
+  margin-top: -4px;
+  padding: 20px 0;
+  color: #333333;  
+}
+
+.cascader-page .sort li {
+  overflow: hidden;
+  /* min-height: 64px; */
+}
+
+.cascader-page .sort li div {
+  float: left;
+}
+
+.cascader-page .label {
+  padding: 10px;
+  width: 120px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.cascader-page .list {
+  width: 640px;
+}
+
+.cascader-page .list-no-sort {
+  width: 800px;
+  padding-left: 18px;
+}
+
+.cascader-page .panel span {
+  display: inline-block;
+  padding: 10px;
+  /* margin-bottom: 10px; */
+  width: 140px;
+  word-wrap: break-word; 
+  word-break: normal; 
+  line-height: 1.2;
+  /* text-align: center; */
+  vertical-align: top;
+}
+
+.cascader-page .panel span:active {
+  background: #eff3f6;
+  color: #ff7137;
+}

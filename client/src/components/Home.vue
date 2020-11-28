@@ -75,6 +75,23 @@ export default {
     }, err => {
       this.$message.error(err.message)
     })
+
+    // axios.post('http://localhost:8888/addLanguage', {data: {name: 'sff'}}).then(res => {
+    //   console.log(res)
+    // }, err => {
+    //   this.$message.error(err.message)
+    // })
+
+    axios({
+      method: "POST",
+      url: 'http://localhost:8888/post',
+      headers: {'content-type': 'application/json'},
+      data: {
+        name: '孙锋锋'
+      }
+    }).then(res => {
+      console.log(res)
+    })
   },
   methods: {
     onCreate () {

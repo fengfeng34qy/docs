@@ -1,3 +1,5 @@
+
+// 创建表
 const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS user(
     user_id INT(5) NOT NULL AUTO_INCREMENT,
     user_name VARCHAR(255) NOT NULL,

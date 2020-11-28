@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var _DatePick=require("./DatePick"),_DatePick2=_interopRequireDefault(_DatePick);function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}var install=function(e,t){e.component(_DatePick2.default.name,_DatePick2.default)};exports.default={install:install};

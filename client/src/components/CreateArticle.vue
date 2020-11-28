@@ -133,4 +133,9 @@ export default {
 .mavon-editor {
   height: 680px;
 }
+.vue-html5-editor {
+  height: 680px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
+  border: none;
+}
 </style>

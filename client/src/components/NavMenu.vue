@@ -9,12 +9,15 @@
       active-text-color="#000">
       <el-menu-item v-for="(item, index) in data" :key="index" :index="item.language" style="width:100px;">{{item.name}}</el-menu-item>
     </el-menu>
-    <div class="icon-wrap pointer">
+    <div class="icon-wrap pointer" @click="addNav">
       <i class="el-icon-plus"></i>
     </div>
   </div>
 </template>
 <script>
+import { Dialog } from 'aui-ss'
+import AddLanguage from './dialog/AddLanguage'
+
 export default {
   name: 'NavMenu',
   data () {
@@ -31,6 +34,23 @@ export default {
   methods: {
     handleSelect (key, keyPath) {
       console.log(key, keyPath)
+    },
+    async addNav () {
+      Dialog.showNonAwait(AddLanguage, {
+        closeContentModalRestPart: true,
+        dialogBoxContentArgs: {
+          message: '',
+          btnType: 'ok'
+        }
+      })
+      // const h = this.$createElement
+      // this.$msgbox({
+      //   title: '消息',
+      //   message: AddLanguage,
+      //   showCancelButton: true,
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消'
+      // })
     }
   }
 }

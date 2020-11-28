@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var _Switch=require("./Switch"),_Switch2=_interopRequireDefault(_Switch);function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}var install=function(e,t){e.component(_Switch2.default.name,_Switch2.default)};exports.default={install:install};
