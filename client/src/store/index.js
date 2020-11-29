@@ -18,11 +18,7 @@ const store = new Vuex.Store({
         }
       }
     ],
-    languages: [
-      { name: 'JavaScript', language: 'js' },
-      { name: 'Java', language: 'java' },
-      { name: 'NodeJs', language: 'nodeJs' }
-    ]
+    languages: []
   },
   getters,
   mutations: {

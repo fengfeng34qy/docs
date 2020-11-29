@@ -27,15 +27,20 @@ import Login from '@/components/Login'
 
 export default {
   name: 'navbar',
+  data () {
+    return {
+      languages: []
+    }
+  },
   components: {
     SearchInput,
     NavMenu,
     Login
   },
   computed: {
-    languages () {
-      return this.$store.state.languages
-    },
+    // languages () {
+    //   return this.$store.state.languages
+    // },
     isShow () {
       console.log(this.$route.fullPath)
       if (this.$route.fullPath === '/') {
@@ -45,9 +50,7 @@ export default {
       }
     }
   },
-  data () {
-    return {}
-  }
+  mounted () {}
 }
 </script>
 <style scoped>

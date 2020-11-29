@@ -1,8 +1,9 @@
-const mysql = require('mysql')
-const MYSQL_CONFIG = require('../config/mysql_config')
+// const mysql = require('mysql')
+// const MYSQL_CONFIG = require('../config/mysql_config')
+const pool = require('./pool')
 
 // mysql
-const pool = mysql.createPool(MYSQL_CONFIG)
+// const pool = mysql.createPool(MYSQL_CONFIG)
 // query sql语句
 const query = (sql, val) => {
     return new Promise((resolve, reject) => {

@@ -7,7 +7,7 @@
       background-color="#fff"
       text-color="#000"
       active-text-color="#000">
-      <el-menu-item v-for="(item, index) in data" :key="index" :index="item.language" style="width:100px;">{{item.name}}</el-menu-item>
+      <el-menu-item v-for="(item, index) in Languages" :key="index" :index="item.language" style="width:100px;">{{item.name}}</el-menu-item>
     </el-menu>
     <div class="icon-wrap pointer" @click="addNav">
       <i class="el-icon-plus"></i>
@@ -16,33 +16,60 @@
 </template>
 <script>
 import { Dialog } from 'aui-ss'
+import axios from 'axios'
 import AddLanguage from './dialog/AddLanguage'
 
 export default {
   name: 'NavMenu',
   data () {
     return {
-      activeIndex: this.data[0].language
+      Languages: [],
+      activeIndex: ''
     }
   },
-  props: {
-    data: Array
-  },
+  // props: {
+  //   data: Array
+  // },
   mounted () {
-    console.log(this.data)
+    axios({
+      method: "POST",
+      url: 'http://localhost:8888/getLanguages',
+      headers: {'content-type': 'application/json'},
+      data: {
+        name: 'sff'
+      }
+    }).then(res => {
+      console.log(res)
+      this.Languages = res.data.data
+      this.activeIndex = this.Languages[0].language
+      // this.$store.commit('setLanguages', res.data.data)
+    })
   },
   methods: {
     handleSelect (key, keyPath) {
       console.log(key, keyPath)
     },
     async addNav () {
-      Dialog.showNonAwait(AddLanguage, {
+      let dialog = await Dialog.showAwait(AddLanguage, {
         closeContentModalRestPart: true,
         dialogBoxContentArgs: {
           message: '',
-          btnType: 'ok'
+          btnType: 'okCancel'
         }
       })
+      console.log(dialog)
+      if (dialog.result === 'OK') {
+        axios({
+          method: "POST",
+          url: 'http://localhost:8888/addLanguage',
+          headers: {'content-type': 'application/json'},
+          data: {
+            language: dialog.data
+          }
+        }).then(res => {
+          console.log(res)
+        })
+      }
       // const h = this.$createElement
       // this.$msgbox({
       //   title: '消息',

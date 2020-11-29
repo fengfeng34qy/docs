@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div v-if="false">
+    <div v-if="true">
       <el-button type="text" @click="dialogFormVisible = true">登录</el-button>
       <span>|</span>
       <el-button type="text" @click="dialogRegisterVisible = true">注册</el-button>
@@ -20,7 +20,7 @@
         </el-form-item>
         <div>
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click.native.prevent="submitForm('ruleForm')">登录</el-button>
+          <el-button type="primary" @click.native.prevent="submitFormSignin('ruleForm')">登录</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -34,13 +34,15 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogRegisterVisible = false">取消</el-button>
-          <el-button type="primary" native-type="submit" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" native-type="submit" @click="submitFormSignup('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Login',
   data () {
@@ -76,8 +78,41 @@ export default {
     }
   },
   methods: {
-    submitForm () {
-      console.log('su')
+    submitFormSignin () {
+      axios({
+        method: 'POST',
+        url: 'http://localhost:8888/signin',
+        data: {
+          username: this.ruleForm.user,
+          password: this.ruleForm.pass
+        }
+      }).then(res => {
+        this.dialogFormVisible = false
+        console.log(res)
+        if (res.data.returnCode === '000000') {
+          this.$message.success('登录成功')
+        } else {
+          this.$message.error(res.data.returnMessage)
+        }
+      })
+    },
+    submitFormSignup () {
+      axios({
+        method: 'POST',
+        url: 'http://localhost:8888/signup',
+        data: {
+          username: this.ruleForm.user,
+          password: this.ruleForm.pass
+        }
+      }).then(res => {
+        this.dialogRegisterVisible = false
+        console.log(res)
+        if (res.data.returnCode === '000000') {
+          this.$message.success('注册成功')
+        } else {
+          this.$message.error(res.data.returnMessage)
+        }
+      })
     },
     onCloseSign () {
       this.ruleForm.user = ''

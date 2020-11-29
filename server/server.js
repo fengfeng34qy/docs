@@ -3,9 +3,8 @@ const Koa = require('koa')
 const route = require('koa-route')
 const cors = require('koa2-cors')
 const mysql = require('./utils/query')
-// var moment = require('moment');
 const bodyParser = require('koa-bodyparser')
-// require('./routes')
+const { Language, User } = require('./routes')
 // const koaBody = require('koa-body');
 
 
@@ -23,20 +22,18 @@ app.use(route.post('/post', (ctx) => {
     ctx.response.body = {data: '测试post返回数据'}
 }))
 
-// console.log(moment(1606550217059).format('YYYYMMDD'))
-
 // 添加语言模块
-// app.use(route.post('/addLanguage', async ctx => {
-//     console.log(ctx.req)
-    // let language = '';
-    // let name = '';
-    // let content = '';
-    // let createtime = +new Date();
-    // let updatetime = +new Date();
-    // let sql = `INSERT INTO languages VALUES (${language}, ${name}, ${content}, ${createtime}, ${updatetime});`
-    // let data = await mysql.query(sql)
-//     ctx.response.body = {data: '测试post返回数据'}
-// }))
+app.use(route.post('/addLanguage', Language.addLanguage))
+
+// 查询语言模块
+app.use(route.post('/getLanguages', Language.getLanguages))
+
+// 注册
+app.use(route.post('/signup', User.signup))
+
+// 登录
+app.use(route.post('/signin', User.signin))
+
 // app.use(async (ctx) => {
 //     console.log('-------------')
     // console.log(ctx.method)

@@ -82,16 +82,15 @@ export default {
     //   this.$message.error(err.message)
     // })
 
-    axios({
-      method: "POST",
-      url: 'http://localhost:8888/post',
-      headers: {'content-type': 'application/json'},
-      data: {
-        name: '孙锋锋'
-      }
-    }).then(res => {
-      console.log(res)
-    })
+    // axios({
+    //   method: "POST",
+    //   url: 'http://localhost:8888/getLanguages',
+    //   headers: {'content-type': 'application/json'},
+    //   data: {}
+    // }).then(res => {
+    //   console.log(res)
+    //   this.$store.commit('setLanguages', res.data.data)
+    // })
   },
   methods: {
     onCreate () {
