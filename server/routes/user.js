@@ -28,32 +28,63 @@ module.exports = {
     },
     // 用户登录
     async signin(ctx) {
-        console.log(ctx.request.body)
         let body = ctx.request.body
-        let timestamp = String(+new Date())
+        let timestamp = +new Date()
         let username = body.username
         let password = body.password
         let sql = `SELECT * FROM users where username='${username}'`
         let data = null
         try {
             data = await mysql.query(sql)
-        let password = body.password
+            let password = body.password
+            // 验证密码
             if (data[0].password === password) {
-                let token = Buffer.from(timestamp).toString('base64')
-                let s = `UPDATE users SET token='${token}' WHERE username="${username}";`
+                let token = Buffer.from("" + timestamp).toString('base64')
+                let timeout = String(timestamp + 1000*60*30)
+                let s = `UPDATE users SET token='${token}', timeout='${timeout}' WHERE username="${username}";`
                 try {
-                    let result = await mysql.query(s)
-                    ctx.response.body = {returnCode: '000000', data: result, returnMessage: '成功', token }
+                    await mysql.query(s)
+                    ctx.response.body = {returnCode: '000000', data: data[0], returnMessage: '登录成功', token }
                 } catch (err) {
                     ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
-                    return;
                 }
-                ctx.response.body = {returnCode: '000000', data, returnMessage: '成功', token }
             } else {
                 ctx.response.body = {returnCode: '999999', data, returnMessage: '密码错误'}
             }
         } catch (err) {
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
+        }
+    },
+    // 获取用户信息
+    async getUserInfo(ctx) {
+        let currentTimestamp = +new Date()
+        let body = ctx.request.body
+        console.log(body)
+        let token = body.token
+        let sql = `SELECT * FROM users where token='${token}'`
+        let data = null
+        try {
+            data = await mysql.query(sql)
+            if (data.length > 0) {
+                if (data[0].timeout > currentTimestamp) {
+                    try {
+                        let username = data[0].username
+                        let newToken = Buffer.from("" + currentTimestamp).toString('base64')
+                        let newTimeout = '' + (currentTimestamp + 1000*60*30)
+                        let s = `UPDATE users SET token='${newToken}', timeout='${newTimeout}' WHERE username="${username}";`
+                        await mysql.query(s)
+                        ctx.body = {returnCode: '000000',data: data[0],returnMessage: '成功',token: newToken }
+                    } catch (err) {
+                        ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
+                    }
+                } else {
+                    ctx.body = {returnCode: '999999',returnMessage: '登录超时' }
+                }
+            } else {
+                ctx.body = {returnCode: '999999',returnMessage: '未登录' }
+            }
+        } catch (err) {
+            ctx.body = {returnCode: '999999',returnMessage: err.sqlMessage, err }
         }
     }
 }

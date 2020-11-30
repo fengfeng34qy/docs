@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    userInfo: {},
     articleList: [
       {
         title: '标题标题标题标题标题标题标题标题标题标题标题标题',
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
     },
     setLanguages (state, data) {
       state.languages = data
+    },
+    setUserInfo (state, data) {
+      state.userInfo = data
     }
   },
   actions: {},

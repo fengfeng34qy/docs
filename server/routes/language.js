@@ -2,7 +2,6 @@ const mysql = require('../utils/query')
 
 module.exports = {
     async addLanguage(ctx) {
-        console.log(ctx.request.body)
         let timestamp = +new Date()
         let body = ctx.request.body
         let language = body.language

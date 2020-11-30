@@ -35,9 +35,7 @@ export default {
       method: "POST",
       url: 'http://localhost:8888/getLanguages',
       headers: {'content-type': 'application/json'},
-      data: {
-        name: 'sff'
-      }
+      data: {}
     }).then(res => {
       console.log(res)
       this.Languages = res.data.data

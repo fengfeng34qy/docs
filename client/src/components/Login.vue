@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div v-if="true">
+    <div v-if="!isAuthenticated">
       <el-button type="text" @click="dialogFormVisible = true">登录</el-button>
       <span>|</span>
       <el-button type="text" @click="dialogRegisterVisible = true">注册</el-button>
@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.user" :minlength="3" :maxlength="12" autocomplete="on"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm.pass" autocomplete="on" @keyup.enter.native="submitForm" :minlength="3" :maxlength="12"></el-input>
+          <el-input type="password" v-model="ruleForm.pass" autocomplete="on" @keyup.enter.native="submitFormSignin" :minlength="3" :maxlength="12"></el-input>
         </el-form-item>
         <div>
           <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -61,6 +61,7 @@ export default {
       }
     }
     return {
+      isAuthenticated: false,
       dialogFormVisible: false,
       dialogRegisterVisible: false,
       ruleForm: {
@@ -77,6 +78,25 @@ export default {
       }
     }
   },
+  mounted () {
+    axios({
+      method: "POST",
+      url: 'http://localhost:8888/getUserInfo',
+      headers: {'content-type': 'application/json'},
+      data: {
+        token: localStorage.getItem('token')
+      }
+    }).then(res => {
+      console.log(res)
+      if (res.data.returnCode === '000000') {
+        this.$store.commit('setUserInfo', res.data.data)
+        localStorage.setItem('token', res.data.token)
+        this.isAuthenticated = true
+      } else {
+        // this.$message.error(res.data.returnMessage || '未知错误')
+      }
+    })
+  },
   methods: {
     submitFormSignin () {
       axios({
@@ -90,9 +110,12 @@ export default {
         this.dialogFormVisible = false
         console.log(res)
         if (res.data.returnCode === '000000') {
+          this.$store.commit('setUserInfo', res.data.data)
+          this.isAuthenticated = true
           this.$message.success('登录成功')
+          localStorage.setItem('token', res.data.token)
         } else {
-          this.$message.error(res.data.returnMessage)
+          this.$message.error(res.data.returnMessage || '密码错误')
         }
       })
     },
