@@ -60,7 +60,16 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
+      console.log(this.$store.state.articleList)
+      let articleList = this.$store.state.articleList
       console.log(key, keyPath)
+      let result = []
+      for (let i = 0; i < articleList.length; i++) {
+        if (articleList[i].module === key) {
+          result.push(articleList[i])
+        }
+      }
+      this.$store.commit('setArticleList', result)
     },
     async addNav () {
       let dialog = await Dialog.showAwait(AddLanguage, {

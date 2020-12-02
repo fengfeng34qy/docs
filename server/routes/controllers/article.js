@@ -48,7 +48,7 @@ module.exports = {
         let sql = `INSERT INTO articles (author, content, module, createtime, tag, title, updatetime) VALUES ('${author}', '${content}', '${module}', '${createtime}', '${tag}', '${title}', '${updatetime}');`
         try {
             await mysql.query(sql)
-            ctx.response.body = {returnCode: '000000', returnMessage: '创建成功' }
+            ctx.response.body = {returnCode: '000000', returnMessage: '创建成功', token }
         } catch (err) {
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
         }

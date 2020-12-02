@@ -89,7 +89,6 @@ export default {
   },
   methods: {
     onSave (value) {
-      console.log(this.$store.state.userInfo)
       axios({
         method: "POST",
         url: 'http://localhost:8888/auth/addArticle',
@@ -106,10 +105,10 @@ export default {
         console.log(res)
         if (res.data.returnCode === '000000') {
           this.$store.commit('setUserInfo', res.data.data)
-          localStorage.setItem('token', res.data.token)
+          // localStorage.setItem('token', res.data.token)
           this.isAuthenticated = true
         } else {
-          // this.$message.error(res.data.returnMessage || '未知错误')
+          this.$message.error(res.data.returnMessage || '未知错误')
         }
       })
     }
