@@ -1,4 +1,4 @@
-const mysql = require('../utils/query')
+const mysql = require('../../utils/query')
 
 module.exports = {
     // 注册用户
