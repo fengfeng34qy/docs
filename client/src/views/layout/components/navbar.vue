@@ -12,7 +12,7 @@
         <el-col :span="20">
           <div class="flex" justify-content="flex-end">
             <SearchInput v-show="isShow" />
-            <NavMenu v-show="isShow" :data="languages" />
+            <NavMenu v-show="isShow" />
             <Login />
           </div>
         </el-col>
@@ -28,21 +28,18 @@ import Login from '@/components/Login'
 export default {
   name: 'navbar',
   data () {
-    return {
-      languages: []
-    }
+    return {}
   },
   components: {
     SearchInput,
     NavMenu,
     Login
   },
+  props: {
+    languages: Array
+  },
   computed: {
-    // languages () {
-    //   return this.$store.state.languages
-    // },
     isShow () {
-      console.log(this.$route.fullPath)
       if (this.$route.fullPath === '/') {
         return true
       } else {

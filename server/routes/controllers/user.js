@@ -61,7 +61,6 @@ module.exports = {
     async getUserInfo(ctx) {
         let currentTimestamp = +new Date()
         let body = ctx.request.body
-        console.log(body)
         let token = body.token
         let sql = `SELECT * FROM users where token='${token}'`
         let data = null

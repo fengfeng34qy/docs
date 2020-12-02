@@ -23,25 +23,40 @@ export default {
   name: 'NavMenu',
   data () {
     return {
-      Languages: [],
-      activeIndex: ''
+      // activeIndex: ''
     }
   },
-  // props: {
-  //   data: Array
-  // },
+  computed: {
+    Languages () {
+      return this.$store.state.languages
+      // return this.languages
+    },
+    activeIndex () {
+      // return this.$store.state.activeIndex
+      if (this.$store.state.languages && this.$store.state.languages.length > 0) {
+        return this.$store.state.languages[0].language
+      } else {
+        return ""
+      }
+    }
+  },
+  props: {
+    languages: Array
+  },
   mounted () {
-    axios({
-      method: "POST",
-      url: 'http://localhost:8888/getLanguages',
-      headers: {'content-type': 'application/json'},
-      data: {}
-    }).then(res => {
-      console.log(res)
-      this.Languages = res.data.data
-      this.activeIndex = this.Languages[0].language
-      // this.$store.commit('setLanguages', res.data.data)
-    })
+    // console.log(this.languages)
+    // axios({
+    //   method: "POST",
+    //   url: 'http://localhost:8888/getLanguages',
+    //   headers: {'content-type': 'application/json'},
+    //   data: {}
+    // }).then(res => {
+    //   console.log(res)
+    //   if (res.data.data && res.data.data.length > 0) {
+    //     this.$store.commit('setLanguages', res.data.data)
+    //     this.activeIndex = this.$store.state.languages[0].language
+    //   }
+    // })
   },
   methods: {
     handleSelect (key, keyPath) {
@@ -66,6 +81,7 @@ export default {
           }
         }).then(res => {
           console.log(res)
+          this.$store.commit('setLanguages', res.data.data)
         })
       }
       // const h = this.$createElement

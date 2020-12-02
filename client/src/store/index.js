@@ -8,18 +8,9 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     userInfo: {},
-    articleList: [
-      {
-        title: '标题标题标题标题标题标题标题标题标题标题标题标题',
-        date: '2020/10/10',
-        tag: {
-          label: 'css',
-          color: '#fff',
-          type: 'info'
-        }
-      }
-    ],
-    languages: []
+    articleList: [],
+    languages: [],
+    activeIndex: ''
   },
   getters,
   mutations: {
@@ -31,6 +22,9 @@ const store = new Vuex.Store({
     },
     setUserInfo (state, data) {
       state.userInfo = data
+    },
+    setActiveIndex (state, data) {
+      state.activeIndex = data
     }
   },
   actions: {},

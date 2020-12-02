@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const { Language, User, Article, Home, Admin } = require('./controllers')
+const { Language, User, Article, Home } = require('./controllers')
 
 const router = new Router(); // 实例化路由
 
@@ -26,7 +26,7 @@ router.post('/getUserInfo', User.getUserInfo)
 router.post('/getArticle', Article.getArticle)
 
 // 创建文章
-router.post('/addArticle', Admin.signinAuth(), Article.addArticle)
+router.post('/auth/addArticle', Article.addArticle)
 
 // 删除文章
 router.post('/delArticle', Article.delArticle)

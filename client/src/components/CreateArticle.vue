@@ -12,14 +12,14 @@
           <el-select v-model="language" placeholder="请选择分类">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.name"
+              :label="item.language"
+              :value="item.name"><template slot="prepend">分类</template>
             </el-option>
           </el-select>
         </div>
         <div class="mark-box">
-          <el-input placeholder="可不填" v-model="mark">
+          <el-input placeholder="可不填" v-model="tag">
             <template slot="prepend">标签</template>
           </el-input>
         </div>
@@ -64,6 +64,7 @@
 
 <script>
 import toolbars from '../config/toolbars'
+import axios from 'axios'
 
 export default {
   name: 'CreateArticle',
@@ -71,13 +72,7 @@ export default {
     return {
       title: '',
       language: '',
-      mark: '',
-      options: [
-        {
-          value: '选项1',
-          label: '龙须面'
-        }
-      ],
+      tag: '',
       mode: false,
       value: '',
       content: '',
@@ -86,8 +81,38 @@ export default {
       externalLink: {}
     }
   },
+  computed: {
+    options () {
+      console.log(this.$store.state.languages)
+      return this.$store.state.languages
+    }
+  },
   methods: {
-    onSave () {}
+    onSave (value) {
+      console.log(this.$store.state.userInfo)
+      axios({
+        method: "POST",
+        url: 'http://localhost:8888/auth/addArticle',
+        headers: {'content-type': 'application/json'},
+        data: {
+          author: (this.$store.state.userInfo && this.$store.state.userInfo.username) ? this.$store.state.userInfo.username : "",
+          module: this.language,
+          content: value,
+          title: this.title,
+          tag: this.tag,
+          token: localStorage.getItem('token')
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.returnCode === '000000') {
+          this.$store.commit('setUserInfo', res.data.data)
+          localStorage.setItem('token', res.data.token)
+          this.isAuthenticated = true
+        } else {
+          // this.$message.error(res.data.returnMessage || '未知错误')
+        }
+      })
+    }
   }
 }
 </script>

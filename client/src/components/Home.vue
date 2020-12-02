@@ -8,7 +8,7 @@
       <el-main class="main">
         <div class="flex" align-items="flex-start">
           <div v-if="showSlider" flex="2" style="width:28%">
-            <MainArticleList :data="articleList" @create-btn="onCreate" />
+            <MainArticleList :data="articleList" @create-btn="onCreate" @change-editor="changeEditor"/>
             <MainPagination />
           </div>
           <div class="editor-box" flex="3" style="width:72%">
@@ -76,21 +76,30 @@ export default {
       this.$message.error(err.message)
     })
 
-    // axios.post('http://localhost:8888/addLanguage', {data: {name: 'sff'}}).then(res => {
-    //   console.log(res)
-    // }, err => {
-    //   this.$message.error(err.message)
-    // })
-
-    // axios({
-    //   method: "POST",
-    //   url: 'http://localhost:8888/getLanguages',
-    //   headers: {'content-type': 'application/json'},
-    //   data: {}
-    // }).then(res => {
-    //   console.log(res)
-    //   this.$store.commit('setLanguages', res.data.data)
-    // })
+    axios({
+      method: "POST",
+      url: 'http://localhost:8888/home',
+      headers: {'content-type': 'application/json'},
+      data: {}
+    }).then(res => {
+      console.log(res)
+      if (res.data.returnCode === '000000') {
+        if (res.data.data.languages && res.data.data.languages.length > 0) {
+          this.$store.commit('setLanguages', res.data.data.languages)
+        }
+        if (res.data.data.articles && res.data.data.articles.length > 0) {
+          let articles = res.data.data.articles
+          let result = []
+          let fenlei = articles[0].module
+          for (let i = 0; i < articles.length; i++) {
+            if (articles[i].module === fenlei) {
+              result.push(articles[i])
+            }
+          }
+          this.$store.commit('setArticleList', result)
+        }
+      }
+    })
   },
   methods: {
     onCreate () {
@@ -105,6 +114,9 @@ export default {
         this.navFlg = false
       }
       console.log(this.navFlg)
+    },
+    changeEditor (content) {
+      this.value = content
     }
   }
 }

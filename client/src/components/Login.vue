@@ -8,7 +8,7 @@
     <div class="flex" v-else>
       <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="http://www.sunfengfeng.com/images/face/10.png"></el-avatar>
       <div style="margin:0 6px;">|</div>
-      <el-button type="text" @click="dialogRegisterVisible = true">退出</el-button>
+      <el-button type="text" @click="dialogFormSignout">退出</el-button>
     </div>
     <el-dialog title="登录" :visible.sync="dialogFormVisible" :destroy-on-close="true" @closed="onCloseSign">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" autocomplete="on" label-width="100px">
@@ -98,6 +98,7 @@ export default {
     })
   },
   methods: {
+    /* 登录 */
     submitFormSignin () {
       axios({
         method: 'POST',
@@ -108,7 +109,6 @@ export default {
         }
       }).then(res => {
         this.dialogFormVisible = false
-        console.log(res)
         if (res.data.returnCode === '000000') {
           this.$store.commit('setUserInfo', res.data.data)
           this.isAuthenticated = true
@@ -118,6 +118,12 @@ export default {
           this.$message.error(res.data.returnMessage || '密码错误')
         }
       })
+    },
+    /* 退出 */
+    dialogFormSignout () {
+      localStorage.removeItem('token')
+      this.$store.commit('setUserInfo', null)
+      location.href = '/'
     },
     submitFormSignup () {
       axios({
