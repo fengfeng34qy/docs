@@ -86,6 +86,7 @@ export default {
       if (res.data.returnCode === '000000') {
         if (res.data.data.languages && res.data.data.languages.length > 0) {
           this.$store.commit('setLanguages', res.data.data.languages)
+          this.$store.commit('setTags', res.data.data.languages[0].tag)
         }
         if (res.data.data.articles && res.data.data.articles.length > 0) {
           let articles = res.data.data.articles

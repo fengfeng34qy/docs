@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="article-list-wrap">
-      <div class="flex article-list-box pointer" justify-content="space-between" align="left" v-for="(item, index) in Articles" :key="index" :title="item.title + ' - ' + item.author" @click="change(item.content)">
+      <div class="flex article-list-box pointer" justify-content="space-between" align="left" v-for="(item, index) in Articles" :key="index" :title="item.title + ' - ' + item.tag + ' - ' + item.author" @click="change(item.content)">
         <div class="flex" justify-content="flex-start" style="width:100%;">
           <div align="right" align-items="center" style="width:15%;font-size:14px;">2020/10/10</div>
           <div class="ellipsis article-title" align-items="center" style="width:70%;">{{item.title}}</div>
@@ -31,9 +31,13 @@ export default {
       return this.$store.state.articleList
     }
   },
+  mounted () {
+    console.log(this.$store.state.languages)
+  },
   methods: {
     onCreate () {
-      this.$emit('create-btn')
+      // this.$emit('create-btn')
+      this.$router.push({ path: '/create/createArticle', name: 'CreateArticle', params: {tag: this.$store.state.tags} })
     },
     change (content) {
       this.$emit('change-editor', content)

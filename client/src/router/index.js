@@ -26,6 +26,7 @@ export default new Router({
       children: [
         {
           path: 'createArticle',
+          name: 'CreateArticle',
           component: () => import('@/components/CreateArticle'),
           hidden: true
         }

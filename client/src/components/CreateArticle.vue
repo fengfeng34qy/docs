@@ -19,9 +19,14 @@
           </el-select>
         </div>
         <div class="mark-box">
-          <el-input placeholder="可不填" v-model="tag">
-            <template slot="prepend">标签</template>
-          </el-input>
+          <el-select v-model="tag" placeholder="请选择标签">
+            <el-option
+              v-for="item in tags"
+              :key="item.label"
+              :label="item.label"
+              :value="item.value"><template slot="prepend">标签</template>
+            </el-option>
+          </el-select>
         </div>
       </div>
       <div class="mode-box">
@@ -81,10 +86,16 @@ export default {
       externalLink: {}
     }
   },
+  mounted () {
+    console.log(this.$route.params.tag)
+  },
   computed: {
     options () {
       console.log(this.$store.state.languages)
       return this.$store.state.languages
+    },
+    tags () {
+      return this.$route.params.tag
     }
   },
   methods: {
@@ -98,7 +109,7 @@ export default {
           module: this.language,
           content: value,
           title: this.title,
-          tag: this.tag,
+          tag: this.tag.replace(/\s/g, ''),
           token: localStorage.getItem('token')
         }
       }).then(res => {
@@ -108,7 +119,8 @@ export default {
           // localStorage.setItem('token', res.data.token)
           this.isAuthenticated = true
         } else {
-          this.$message.error(res.data.returnMessage || '未知错误')
+          // this.$message.error(res.data.returnMessage || '未知错误')
+          this.$notify({title: '警告', message: res.data.returnMessage, type: 'warning'})
         }
       })
     }

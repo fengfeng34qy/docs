@@ -29,8 +29,14 @@
         <el-form-item label="用户名" prop="user">
           <el-input v-model="ruleForm.user" :minlength="3" :maxlength="12" autocomplete="on"></el-input>
         </el-form-item>
+        <el-form-item label="昵称">
+          <el-input v-model="ruleForm.nickname" :minlength="3" :maxlength="12" autocomplete="on"></el-input>
+        </el-form-item>
         <el-form-item label="密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off" :minlength="3" :maxlength="12"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="ruleForm.email" :minlength="3" :maxlength="36" autocomplete="on"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogRegisterVisible = false">取消</el-button>
@@ -66,7 +72,9 @@ export default {
       dialogRegisterVisible: false,
       ruleForm: {
         pass: '',
-        user: ''
+        user: '',
+        nickname: '',
+        email: ''
       },
       rules: {
         pass: [
@@ -131,13 +139,18 @@ export default {
         url: 'http://localhost:8888/signup',
         data: {
           username: this.ruleForm.user,
+          nickname: this.ruleForm.nickname,
+          email: this.ruleForm.email,
           password: this.ruleForm.pass
         }
       }).then(res => {
         this.dialogRegisterVisible = false
         console.log(res)
         if (res.data.returnCode === '000000') {
-          this.$message.success('注册成功')
+          this.$notify({ title: '成功', message: '注册成功', type: 'success' })
+          setTimeout(() => {
+            location.href = '/'
+          }, 1500)
         } else {
           this.$message.error(res.data.returnMessage)
         }

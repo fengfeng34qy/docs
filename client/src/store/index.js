@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     userInfo: {},
     articleList: [],
     languages: [],
+    tags: [],
     activeIndex: ''
   },
   getters,
@@ -25,6 +26,17 @@ const store = new Vuex.Store({
     },
     setActiveIndex (state, data) {
       state.activeIndex = data
+    },
+    setTags (state, data) {
+      let tmpResult = data.split(',')
+      let result = []
+      for (let i = 0; i < tmpResult.length; i++) {
+        let obj = {}
+        obj.value = tmpResult[i]
+        obj.label = tmpResult[i]
+        result.push(obj)
+      }
+      state.tags = result
     }
   },
   actions: {},

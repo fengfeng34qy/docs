@@ -7,13 +7,15 @@ module.exports = {
         let body = ctx.request.body
         let currentDate = +new Date()
         let username = body.username
+        let nickname = body.nickname
+        let email = body.email
         let password = body.password
         let face = body.face || ''
         let role = body.role || 0
         let token = ''
         let createtime = currentDate
         let updatetime = currentDate
-        let sql = `INSERT INTO users (username, password, face, role, token, createtime, updatetime) VALUES ('${username}', '${password}', '${face}', '${role}', '${token}', '${createtime}', '${updatetime}');`
+        let sql = `INSERT INTO users (username, nickname, email, password, face, role, token, createtime, updatetime) VALUES ('${username}', '${nickname}', '${email}', '${password}', '${face}', '${role}', '${token}', '${createtime}', '${updatetime}');`
         let data = null
         try {
             data = await mysql.query(sql)
@@ -38,7 +40,6 @@ module.exports = {
         let data = null
         try {
             data = await mysql.query(sql)
-            let password = body.password
             // 验证密码
             if (data[0].password === password) {
                 let token = Buffer.from("" + timestamp).toString('base64')
@@ -54,6 +55,7 @@ module.exports = {
                 ctx.response.body = {returnCode: '999999', data, returnMessage: '密码错误'}
             }
         } catch (err) {
+            console.log(err)
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
         }
     },

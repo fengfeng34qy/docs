@@ -17,7 +17,7 @@
 <script>
 import { Dialog } from 'aui-ss'
 import axios from 'axios'
-import AddLanguage from './dialog/AddLanguage'
+import AddLanguageDialog from './dialog/AddLanguageDialog'
 
 export default {
   name: 'NavMenu',
@@ -72,7 +72,7 @@ export default {
       this.$store.commit('setArticleList', result)
     },
     async addNav () {
-      let dialog = await Dialog.showAwait(AddLanguage, {
+      let dialog = await Dialog.showAwait(AddLanguageDialog, {
         closeContentModalRestPart: true,
         dialogBoxContentArgs: {
           message: '',
@@ -86,21 +86,14 @@ export default {
           url: 'http://localhost:8888/addLanguage',
           headers: {'content-type': 'application/json'},
           data: {
-            language: dialog.data
+            language: dialog.data.language,
+            tag: dialog.data.tag
           }
         }).then(res => {
           console.log(res)
           this.$store.commit('setLanguages', res.data.data)
         })
       }
-      // const h = this.$createElement
-      // this.$msgbox({
-      //   title: '消息',
-      //   message: AddLanguage,
-      //   showCancelButton: true,
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消'
-      // })
     }
   }
 }

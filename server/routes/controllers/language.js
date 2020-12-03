@@ -6,15 +6,17 @@ module.exports = {
         let body = ctx.request.body
         let language = body.language
         let name = body.language
+        let tag = body.tag
         let createtime = timestamp
         let updatetime = timestamp
-        let sql = `INSERT INTO languages (language, name, createtime, updatetime) VALUES ('${language}', '${name}', '${createtime}', '${updatetime}');`
+        let sql = `INSERT INTO languages (language, name, tag, createtime, updatetime) VALUES ('${language}', '${name}', '${tag}', '${createtime}', '${updatetime}');`
         let data = null
         try {
             await mysql.query(sql)
             data = await mysql.query(`SELECT * FROM languages`)
             ctx.response.body = {returnCode: '000000', data, returnMessage: '成功'}
         } catch (err) {
+            console.log(err)
             if  (err.code === 'ER_DUP_ENTRY') {
                 ctx.response.body = {returnCode: err.code, returnMessage: '已经存在，不能重复添加！', err}
             } else {
