@@ -1,5 +1,6 @@
 
 const mysql = require('../../utils/query')
+const Admin = require('../../utils/admin')
 
 module.exports = {
     // 获取文章
@@ -8,6 +9,7 @@ module.exports = {
         let data = null
         try {
             data = await mysql.query(sql)
+            console.log(data)
             ctx.response.body = {returnCode: '000000', data, returnMessage: '成功'}
         } catch (err) {
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
@@ -17,28 +19,18 @@ module.exports = {
     async addArticle(ctx, next) {
         let body = ctx.request.body
         let timestamp = +new Date()
+
         // 认证
-        let token = body.token
-        try {
-            let data = await mysql.query(`SELECT * FROM users where token='${token}'`)
-            if (data.length > 0) {
-                console.log(data)
-                if (data[0].timeout <= timestamp) {
-                    ctx.response.body = {returnCode: '999999',returnMessage: '登录超时' }
-                    return
-                }
-            } else {
-                ctx.response.body = {returnCode: '999999',returnMessage: '请先登录' }
-                return
-            }
-        } catch (error) {
-            ctx.body = {returnCode: '999999',returnMessage: error.sqlMessage, error }
+        if (!await Admin.isAuthenticated(ctx)) {
+            console.log('没有认证通过')
             return
         }
 
         let author = body.author
         let content = body.content
+        content = content.replace(/\"/g, '\\\"').replace(/\'/g, '\\\'')
         let module = body.module
+        let token = body.token
         let createtime = '' + timestamp
         // let star = ''
         // let state = ''
@@ -50,12 +42,33 @@ module.exports = {
             await mysql.query(sql)
             ctx.response.body = {returnCode: '000000', returnMessage: '创建成功', token }
         } catch (err) {
+            console.log(err)
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
         }
     },
     // 删除文章
-    delArticle(ctx) {
+    async delArticle(ctx) {
         let body = ctx.request.body
         let id = body.id
+    },
+    // 更新文章
+    async updateArticle(ctx) {
+        let body = ctx.request.body
+        if (!await Admin.isAuthenticated(ctx)) {
+            console.log('没有认证通过')
+            return
+        }
+        let id = body.id
+        let content = body.content.replace(/\"/g, "\\\"").replace(/\'/g, "\\\'")
+        let sql = `UPDATE articles SET content='${content}' WHERE(id='${id}');`
+        console.log('==========')
+        console.log(sql)
+        try {
+            await mysql.query(sql)
+            ctx.response.body = {returnCode: '000000', returnMessage: '更新成功'}
+        } catch (err) {
+            console.log(err)
+            ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
+        }
     }
 }

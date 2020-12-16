@@ -17,6 +17,7 @@
       :tabSize="4"
       :externalLink="externalLink"
       @save="onSave"
+      @change="onchange"
       :value="value"
     />
   </div>
@@ -69,6 +70,9 @@ export default {
   mounted () {},
   methods: {
     onSave (data) {
+    },
+    onchange (val) {
+      this.$emit('mavon-editor-change', val)
     }
   }
 }

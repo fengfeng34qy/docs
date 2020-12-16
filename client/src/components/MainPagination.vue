@@ -5,7 +5,8 @@
       @current-change="handleCurrentChange"
       :current-page="currentPage"
       layout="prev, pager, next"
-      :total="100">
+      :page-size="10"
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -16,6 +17,12 @@ export default {
     return {
       currentPage: 1
     }
+  },
+  props: {
+    total: Number
+  },
+  mounted () {
+    console.log(this.total)
   },
   methods: {
     handleSizeChange (val) {

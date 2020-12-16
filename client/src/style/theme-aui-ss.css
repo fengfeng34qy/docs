@@ -148,7 +148,7 @@
   background-color: #eff3f6;
 }
 /*table滚动条样式*/
-.v-table-body::-webkit-scrollbar{
+/* .v-table-body::-webkit-scrollbar{
   width: 6px;
   height: 6px;
 }
@@ -165,7 +165,7 @@
 }
 .v-table-body::-webkit-scrollbar-corner{
   background-color: #f6f6f6;
-}
+} */
 /* 暂时隐藏表格下的分页签 */
 .v-page-ul{
   display: none;
@@ -310,13 +310,13 @@
   width: 640px;
 }
 /* 面向属性css */
-w100{
+.w100{
   width: 100%;
 }
-h100{
+.h100{
   height: 100%;
 }
-::-webkit-scrollbar{
+/* ::-webkit-scrollbar{
   width: 6px;
   height: 100px;
 }
@@ -326,4 +326,4 @@ h100{
 }
 ::-webkit-scrollbar-track{
   background: transparent;
-}
+} */

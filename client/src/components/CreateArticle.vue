@@ -75,6 +75,7 @@ export default {
   name: 'CreateArticle',
   data () {
     return {
+      options: [],
       title: '',
       language: '',
       tag: '',
@@ -87,13 +88,14 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.tag)
+    console.log(this.$route.params)
+    this.options = this.$route.params.languages
   },
   computed: {
-    options () {
-      console.log(this.$store.state.languages)
-      return this.$store.state.languages
-    },
+    // options () {
+    //   console.log(this.$store.state.languages)
+    //   return this.$store.state.languages
+    // },
     tags () {
       return this.$route.params.tag
     }
@@ -115,9 +117,9 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.data.returnCode === '000000') {
-          this.$store.commit('setUserInfo', res.data.data)
+          // this.$store.commit('setUserInfo', res.data.data)
           // localStorage.setItem('token', res.data.token)
-          this.isAuthenticated = true
+          this.$notify({title: '创建成功', message: '', type: 'success'})
         } else {
           // this.$message.error(res.data.returnMessage || '未知错误')
           this.$notify({title: '警告', message: res.data.returnMessage, type: 'warning'})

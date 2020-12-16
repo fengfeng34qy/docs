@@ -6,7 +6,9 @@ module.exports = {
             let data = {}
 
             data.articles = await mysql.query(`SELECT * FROM articles`)
-
+            data.articles.sort((a, b) => {
+                return b.createtime - a.createtime
+            })
             data.languages = await mysql.query(`SELECT * FROM languages`)
 
             ctx.response.body = {returnCode: '000000', data, returnMessage: '成功'}

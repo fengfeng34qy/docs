@@ -28,12 +28,12 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 6px;
   background-color: #e5e5e5;
   border-radius: 4px;
-}
-::-webkit-scrollbar-thumb {
+} */
+/* ::-webkit-scrollbar-thumb {
   background-color: #b7b7b7;
   border-radius: 4px;
 }
@@ -43,5 +43,5 @@ export default {
 ::-webkit-scrollbar-thumb-track {
   box-shadow: 0 0 0px #808080 inset;
   -webkit-box-shadow: 0 0 0px #808080 inset;
-}
+} */
 </style>

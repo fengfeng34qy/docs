@@ -130,7 +130,6 @@ export default {
     /* 退出 */
     dialogFormSignout () {
       localStorage.removeItem('token')
-      this.$store.commit('setUserInfo', null)
       location.href = '/'
     },
     submitFormSignup () {

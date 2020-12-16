@@ -1,15 +1,14 @@
 <template>
   <div class="home">
     <div class="editorSaveBtn">
-      <el-button class="editor-btn" type="primary" @click="onEditor">{{editorText}}</el-button>
+      <el-button class="editor-btn" type="primary" v-if="isLogin" @click="onEditor">{{editorText}}</el-button>
       <el-button class="back-btn" v-if="toolbarsFlag" @click="onEditor">返回</el-button>
     </div>
     <el-container>
       <el-main class="main">
         <div class="flex" align-items="flex-start">
           <div v-if="showSlider" flex="2" style="width:28%">
-            <MainArticleList :data="articleList" @create-btn="onCreate" @change-editor="changeEditor"/>
-            <MainPagination />
+            <MainArticleList ref="mainArticle" :data="articleList" :articles="articles" :currentTag="currentTag" :total="total"  @create-btn="onCreate" @tag-change="tagChange" @pagination-change="paginationChange" @change-editor="changeEditor"/>
           </div>
           <div class="editor-box" flex="3" style="width:72%">
             <MainEditor
@@ -17,6 +16,7 @@
               :subfield="subfield"
               :toolbarsFlag="toolbarsFlag"
               :navigation="navFlg"
+              @mavon-editor-change="mavonEditorChange"
             />
           </div>
         </div>
@@ -38,6 +38,7 @@ export default {
   name: 'home',
   data () {
     return {
+      articleId: '',
       navFlg: false,
       value: '',
       subfield: false
@@ -51,7 +52,16 @@ export default {
     MainPagination,
     MainArticleList
   },
+  props: {
+    articles: Array,
+    total: Number,
+    pageSize: Number,
+    currentTag: String
+  },
   computed: {
+    isLogin () {
+      return this.$store.state.userInfo.username
+    },
     articleList () {
       return this.$store.state.articleList
     },
@@ -75,32 +85,6 @@ export default {
     }, err => {
       this.$message.error(err.message)
     })
-
-    axios({
-      method: "POST",
-      url: 'http://localhost:8888/home',
-      headers: {'content-type': 'application/json'},
-      data: {}
-    }).then(res => {
-      console.log(res)
-      if (res.data.returnCode === '000000') {
-        if (res.data.data.languages && res.data.data.languages.length > 0) {
-          this.$store.commit('setLanguages', res.data.data.languages)
-          this.$store.commit('setTags', res.data.data.languages[0].tag)
-        }
-        if (res.data.data.articles && res.data.data.articles.length > 0) {
-          let articles = res.data.data.articles
-          let result = []
-          let fenlei = articles[0].module
-          for (let i = 0; i < articles.length; i++) {
-            if (articles[i].module === fenlei) {
-              result.push(articles[i])
-            }
-          }
-          this.$store.commit('setArticleList', result)
-        }
-      }
-    })
   },
   methods: {
     onCreate () {
@@ -110,14 +94,46 @@ export default {
       console.log('a')
     },
     onEditor () {
-      this.subfield = !this.subfield
       if (this.subfield) {
-        this.navFlg = false
+        axios({
+          method: 'POST',
+          url: 'http://localhost:8888/updateArticle',
+          data: {
+            id: this.articleId,
+            content: this.value,
+            token: localStorage.getItem('token')
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.data.returnCode === '000000') {
+            this.subfield = false
+            this.navFlg = false
+          } else {
+            this.$message.error(res.data.returnMessage)
+          }
+        })
+      } else {
+        this.subfield = true
       }
-      console.log(this.navFlg)
     },
-    changeEditor (content) {
-      this.value = content
+    mavonEditorChange (val) {
+      this.value = val
+    },
+    changeEditor (item) {
+      this.articleId = item.id
+      this.value = item.content
+    },
+    tagChange (data) {
+      this.$emit('tag-change', data)
+    },
+    paginationChange (data) {
+      this.$emit('pagination-change', data)
+    },
+    fn () {
+      this.$refs.mainArticle.fn()
+    },
+    setTags (tags) {
+      this.$refs.mainArticle.setTags(tags)
     }
   }
 }

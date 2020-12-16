@@ -9,6 +9,7 @@ import ElementUI from 'element-ui'
 import AUISS from 'aui-ss'
 import mavonEditor from 'mavon-editor'
 import store from './store'
+import * as filters from './filters'
 import 'element-ui/lib/theme-chalk/index.css'
 import './style/theme-aui-ss.css'
 import 'mavon-editor/dist/css/index.css'
@@ -20,6 +21,17 @@ Vue.use(mavonEditor)
 Vue.use(VueHtml5Editor, html5EditorConfig)
 
 Vue.config.productionTip = false
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
+// 路由跳转前触发
+router.beforeEach((to, from, next) => {
+  next()
+})
+
+Vue.mixin(require('./mixins/event-mixin').default)
 
 /* eslint-disable no-new */
 new Vue({

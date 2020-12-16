@@ -30,6 +30,10 @@ const store = new Vuex.Store({
     setTags (state, data) {
       let tmpResult = data.split(',')
       let result = []
+      result.push({
+        value: 'all',
+        label: '全部'
+      })
       for (let i = 0; i < tmpResult.length; i++) {
         let obj = {}
         obj.value = tmpResult[i]
