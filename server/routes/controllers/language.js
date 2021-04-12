@@ -19,6 +19,9 @@ module.exports = {
             console.log(err)
             if  (err.code === 'ER_DUP_ENTRY') {
                 ctx.response.body = {returnCode: err.code, returnMessage: '已经存在，不能重复添加！', err}
+            } else if (err.code === 'ER_NO_SUCH_TABLE') {
+                // 创建表
+                ctx.response.body = {returnCode: err.code, returnMessage: '没有找到数据库表，请联系管理员创建表', err}
             } else {
                 ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
             }

@@ -14,9 +14,10 @@ module.exports = {
             ctx.response.body = {returnCode: '000000', data, returnMessage: '成功'}
 
         } catch (err) {
+            console.log(typeof err)
             console.log(err)
             if (typeof err === 'object') {
-                ctx.response.body = {returnCode: '999999', err, returnMessage: '失败'}
+                ctx.response.body = {returnCode: '999999', err, returnMessage: err.sqlMessage}
             } else {
                 ctx.response.body = {returnCode: '999999', err: err, returnMessage: '失败'}
             }
