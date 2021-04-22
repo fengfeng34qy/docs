@@ -1,14 +1,14 @@
 <template>
   <div class="login">
     <div v-if="!isAuthenticated">
-      <el-button type="text" @click="dialogFormVisible = true">登录</el-button>
-      <span>|</span>
-      <el-button type="text" @click="dialogRegisterVisible = true">注册</el-button>
+      <el-button type="primary" size="mini" @click="dialogFormVisible = true">登录</el-button>
+      <!-- <span>|</span> -->
+      <el-button type="danger" size="mini" @click="dialogRegisterVisible = true">注册</el-button>
     </div>
     <div class="flex" v-else>
       <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="https://www.sunfengfeng.com/images/face/10.png"></el-avatar>
       <div style="margin:0 6px;">|</div>
-      <el-button type="text" @click="dialogFormSignout">退出</el-button>
+      <el-button type="success" size="mini" @click="dialogFormSignout">退出</el-button>
     </div>
     <el-dialog title="登录" :visible.sync="dialogFormVisible" :destroy-on-close="true" @closed="onCloseSign">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" autocomplete="on" label-width="100px">
