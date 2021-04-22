@@ -1,4 +1,5 @@
 const mysql = require('../../utils/query')
+const crypto = require('../../utils/crypto')
 
 module.exports = {
     // 注册用户
@@ -45,7 +46,8 @@ module.exports = {
         let body = ctx.request.body
         let timestamp = +new Date()
         let username = body.username
-        let password = body.password
+        let password = crypto.decrypted(body.password)
+        console.log('解密:' + password)
         let sql = `SELECT * FROM users where username='${username}'`
         let data = null
         try {

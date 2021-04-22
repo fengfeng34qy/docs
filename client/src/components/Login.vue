@@ -50,6 +50,7 @@
 import C004 from '../messages/C004'
 import C005 from '../messages/C005'
 import C008 from '../messages/C008'
+import crypto from '../common/utils/crypto-js'
 
 export default {
   name: 'Login',
@@ -105,7 +106,7 @@ export default {
     async submitFormSignin () {
       let request = new C005()
       request.username = this.ruleForm.user
-      request.password = this.ruleForm.pass
+      request.password = crypto.encrypted(this.ruleForm.pass)
       let result = await this.RequestHelper.sendAsync(request)
       this.dialogFormVisible = false
       if (result.data.returnCode === '000000') {
