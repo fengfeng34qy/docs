@@ -42,10 +42,13 @@ export default {
         //   // 这是你的hljs文件路径
         //   return '/highlightjs/highlight.min.js';
         // },
-        // hljs_css: function (css) {
-        //   // 这是你的代码高亮配色文件路径
-        //   return '/highlightjs/styles/' + css + '.min.css';
-        // },
+        hljs_css: function (css) {
+          // 这是你的代码高亮配色文件路径
+          // return '/highlightjs/styles/' + css + '.min.css';
+
+          // 我的代码高亮主题
+          return 'static/styles/' + 'myHighlight.css'
+        }
         // hljs_lang: function (lang) {
         //   // 这是你的代码高亮语言解析路径
         //   return '/highlightjs/languages/' + lang + '.min.js';

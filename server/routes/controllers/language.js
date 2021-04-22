@@ -9,6 +9,12 @@ module.exports = {
         let tag = body.tag
         let createtime = timestamp
         let updatetime = timestamp
+
+        if (!language) {
+            ctx.response.body = {returnCode: '999999', returnMessage: '"language"字段必输'}
+            return;
+        }
+
         let sql = `INSERT INTO languages (language, name, tag, createtime, updatetime) VALUES ('${language}', '${name}', '${tag}', '${createtime}', '${updatetime}');`
         let data = null
         try {

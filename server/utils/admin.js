@@ -7,7 +7,6 @@ module.exports = {
         try {
             let data = await mysql.query(`SELECT * FROM users where token='${token}'`)
             if (data.length > 0) {
-                console.log(data)
                 if (data[0].timeout <= timestamp) {
                     ctx.response.body = {returnCode: '999999',returnMessage: '登录超时' }
                     return false

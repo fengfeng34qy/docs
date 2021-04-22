@@ -2,22 +2,25 @@
   <div class="home">
     <div class="editorSaveBtn">
       <el-button class="editor-btn" type="primary" v-if="isLogin" @click="onEditor">{{editorText}}</el-button>
-      <el-button class="back-btn" v-if="toolbarsFlag" @click="onEditor">返回</el-button>
+      <el-button class="back-btn" v-if="toolbarsFlag" @click="onBack">返回</el-button>
     </div>
     <el-container>
       <el-main class="main">
         <div class="flex" align-items="flex-start">
-          <div v-if="showSlider" flex="2" style="width:28%">
-            <MainArticleList ref="mainArticle" :data="articleList" :articles="articles" :currentTag="currentTag" :total="total"  @create-btn="onCreate" @tag-change="tagChange" @pagination-change="paginationChange" @change-editor="changeEditor"/>
+          <div v-show="showSlider" flex="2" style="width:28%">
+            <MainArticleList ref="mainArticle" :data="articleList" :articles="articles" :total="total"  @create-btn="onCreate" @tag-change="tagChange" @pagination-change="paginationChange" @change-editor="changeEditor"/>
           </div>
           <div class="editor-box" flex="3" style="width:72%">
-            <MainEditor
-              :value="value"
-              :subfield="subfield"
-              :toolbarsFlag="toolbarsFlag"
-              :navigation="navFlg"
-              @mavon-editor-change="mavonEditorChange"
-            />
+            <div v-if="!value">使用教程</div>
+            <div v-else>
+              <MainEditor
+                :value="value"
+                :subfield="subfield"
+                :toolbarsFlag="toolbarsFlag"
+                :navigation="navFlg"
+                @mavon-editor-change="mavonEditorChange"
+              />
+            </div>
           </div>
         </div>
       </el-main>
@@ -32,7 +35,8 @@ import SearchInput from '../components/SearchInput'
 import MainEditor from '../components/MainEditor'
 import MainPagination from '../components/MainPagination'
 import MainArticleList from '../components/MainArticleList'
-import axios from 'axios'
+// import axios from 'axios'
+import C007 from '../messages/C007'
 
 export default {
   name: 'home',
@@ -55,12 +59,11 @@ export default {
   props: {
     articles: Array,
     total: Number,
-    pageSize: Number,
-    currentTag: String
+    pageSize: Number
   },
   computed: {
     isLogin () {
-      return this.$store.state.userInfo.username
+      return this.$store.state.userInfo.username && this.$store.state.articleId
     },
     articleList () {
       return this.$store.state.articleList
@@ -79,12 +82,17 @@ export default {
       return this.subfield === true
     }
   },
-  mounted () {
-    axios.get('http://www.sunfengfeng.com/markdownfiles/demo.md').then(res => {
-      this.value = res.data
-    }, err => {
-      this.$message.error(err.message)
+  beforeRouteEnter (to, from, next) {
+    next(async () => {
+      // console.log(to, from)
     })
+  },
+  mounted () {
+    // axios.get('https://www.sunfengfeng.com/markdownfiles/demo.md').then(res => {
+    //   this.value = res.data
+    // }, err => {
+    //   this.$message.error(err.message)
+    // })
   },
   methods: {
     onCreate () {
@@ -93,45 +101,50 @@ export default {
     submitForm () {
       console.log('a')
     },
-    onEditor () {
+    async onEditor () {
       if (this.subfield) {
-        axios({
-          method: 'POST',
-          url: 'http://localhost:8888/updateArticle',
-          data: {
-            id: this.articleId,
-            content: this.value,
-            token: localStorage.getItem('token')
-          }
-        }).then(res => {
-          console.log(res)
-          if (res.data.returnCode === '000000') {
-            this.subfield = false
-            this.navFlg = false
-          } else {
-            this.$message.error(res.data.returnMessage)
-          }
-        })
+        let request = new C007()
+        request.id = this.articleId
+        request.content = this.value
+        request.token = localStorage.getItem('token')
+        let result = await this.RequestHelper.sendAsync(request)
+        if (result.data.returnCode === '000000') {
+          this.subfield = false
+          this.navFlg = false
+        } else {
+          this.$message.error(result.data.returnMessage)
+          // this.$router.push({path: '/create'})
+        }
       } else {
         this.subfield = true
       }
     },
+    // 返回按钮
+    onBack () {
+      this.subfield = false
+    },
     mavonEditorChange (val) {
       this.value = val
     },
+
+    // 点击某个文章事件触发
     changeEditor (item) {
       this.articleId = item.id
       this.value = item.content
     },
+
     tagChange (data) {
       this.$emit('tag-change', data)
     },
+
     paginationChange (data) {
       this.$emit('pagination-change', data)
     },
-    fn () {
-      this.$refs.mainArticle.fn()
+
+    setSideArticle (language) {
+      this.$refs.mainArticle.setSideArticle(language)
     },
+
     setTags (tags) {
       this.$refs.mainArticle.setTags(tags)
     }

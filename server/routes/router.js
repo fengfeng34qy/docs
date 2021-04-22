@@ -32,6 +32,6 @@ router.post('/auth/addArticle', Article.addArticle)
 router.post('/delArticle', Article.delArticle)
 
 // 更新文章
-router.post('/updateArticle', Article.updateArticle)
+router.post('/updateArticle', Article.test, Article.updateArticle)
 
 module.exports = router

@@ -14,7 +14,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "agentkeepalive": "^4.1.4",
+    "assert": "^2.0.0",
     "axios": "^0.21.0",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.0.0",
     "element-ui": "^2.14.0",
     "mavon-editor": "^2.9.0",
     "moment": "^2.29.1",

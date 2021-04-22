@@ -12,7 +12,6 @@
         <el-col :span="20">
           <div class="flex" justify-content="flex-end">
             <SearchInput v-show="isShow" />
-            <!-- <NavMenu v-show="isShow" @nav-click="navOnClick" /> -->
             <div class="flex" style="margin-left:16px;">
               <el-menu
                 :default-active="activeIndex"
@@ -39,8 +38,8 @@ import NavMenu from '@/components/NavMenu'
 import SearchInput from '@/components/SearchInput'
 import Login from '@/components/Login'
 import { Dialog } from 'aui-ss'
-import axios from 'axios'
 import AddLanguageDialog from '../../../components/dialog/AddLanguageDialog'
+import C003 from '../../../messages/C003'
 
 export default {
   name: 'navbar',
@@ -71,6 +70,14 @@ export default {
     }
   },
   mounted () {
+    this.$EventManager.$on("onNavChangeEvent", (data) => {
+      console.log('触发监听事件 - onNavChangeEvent')
+      this.$nextTick(() => {
+        // 设置nav导航
+        this.Languages = data.language
+        this.activeIndex = data.activeIndex
+      })
+    })
   },
   methods: {
     // 导航设置
@@ -78,12 +85,15 @@ export default {
       this.Languages = data
       this.activeIndex = data[0].language
     },
-    navOnClick (key) {
-      this.$emit('nav-click', key)
-    },
-    handleSelect (key, keyPath) {
+    handleSelect (m, keyPath) {
+      // 当前的语言 == session.Customer.language
+      if (this.session.Customer.language === m) return
+      console.log(m, keyPath)
       for (let i = 0; i < this.Languages.length; i++) {
-        if (this.Languages[i].language === key) {
+        if (this.Languages[i].language === m) {
+          let t = this.session.Customer.tag
+          let articles = this.HomeHelper.getArticle(m, t, 'nav')
+          this.$EventManager.$emit('onNavClickEvent', articles)
           this.$emit('nav-click', this.Languages[i])
         }
       }
@@ -98,19 +108,15 @@ export default {
       })
       console.log(dialog)
       if (dialog.result === 'OK') {
-        axios({
-          method: "POST",
-          url: 'http://localhost:8888/addLanguage',
-          headers: {'content-type': 'application/json'},
-          data: {
-            language: dialog.data.language,
-            tag: dialog.data.tag
-          }
-        }).then(res => {
-          console.log(res)
-          // this.$store.commit('setLanguages', res.data.data)
-          this.Languages = res.data.data
-        })
+        if (!dialog.data.language || !dialog.data.tag) {
+          throw new Error('请输入语言和标签')
+        }
+        let request = new C003()
+        request.language = dialog.data.language
+        request.tag = dialog.data.tag
+        let result = await this.RequestHelper.sendAsync(request)
+        console.log(result)
+        this.Languages = result.data.data
       }
     },
     getNavbar () {}

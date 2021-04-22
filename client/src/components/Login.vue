@@ -6,7 +6,7 @@
       <el-button type="text" @click="dialogRegisterVisible = true">注册</el-button>
     </div>
     <div class="flex" v-else>
-      <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="http://www.sunfengfeng.com/images/face/10.png"></el-avatar>
+      <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="https://www.sunfengfeng.com/images/face/10.png"></el-avatar>
       <div style="margin:0 6px;">|</div>
       <el-button type="text" @click="dialogFormSignout">退出</el-button>
     </div>
@@ -20,7 +20,7 @@
         </el-form-item>
         <div>
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click.native.prevent="submitFormSignin('ruleForm')">登录</el-button>
+          <el-button type="primary" :disabled="!ruleForm.user.trim() || !ruleForm.pass.trim()" @click.native.prevent="submitFormSignin('ruleForm')">登录</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -40,14 +40,16 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogRegisterVisible = false">取消</el-button>
-          <el-button type="primary" native-type="submit" @click="submitFormSignup('ruleForm')">提交</el-button>
+          <el-button type="primary" :disabled="!ruleForm.user.trim() || !ruleForm.pass.trim()" native-type="submit" @click="submitFormSignup('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 <script>
-import axios from 'axios'
+import C004 from '../messages/C004'
+import C005 from '../messages/C005'
+import C008 from '../messages/C008'
 
 export default {
   name: 'Login',
@@ -86,74 +88,57 @@ export default {
       }
     }
   },
-  mounted () {
-    axios({
-      method: "POST",
-      url: 'http://localhost:8888/getUserInfo',
-      headers: {'content-type': 'application/json'},
-      data: {
-        token: localStorage.getItem('token')
-      }
-    }).then(res => {
-      console.log(res)
-      if (res.data.returnCode === '000000') {
-        this.$store.commit('setUserInfo', res.data.data)
-        localStorage.setItem('token', res.data.token)
-        this.isAuthenticated = true
-      } else {
-        // this.$message.error(res.data.returnMessage || '未知错误')
-      }
-    })
+  async mounted () {
+    let request = new C008()
+    request.token = localStorage.getItem('token')
+    let result = await this.RequestHelper.sendAsync(request)
+    if (result.data.returnCode === '000000') {
+      this.$store.commit('setUserInfo', result.data.data)
+      localStorage.setItem('token', result.data.token)
+      this.isAuthenticated = true
+    } else {
+      // this.$message.error(res.data.returnMessage || '未知错误')
+    }
   },
   methods: {
     /* 登录 */
-    submitFormSignin () {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:8888/signin',
-        data: {
-          username: this.ruleForm.user,
-          password: this.ruleForm.pass
-        }
-      }).then(res => {
-        this.dialogFormVisible = false
-        if (res.data.returnCode === '000000') {
-          this.$store.commit('setUserInfo', res.data.data)
-          this.isAuthenticated = true
-          this.$message.success('登录成功')
-          localStorage.setItem('token', res.data.token)
-        } else {
-          this.$message.error(res.data.returnMessage || '密码错误')
-        }
-      })
+    async submitFormSignin () {
+      let request = new C005()
+      request.username = this.ruleForm.user
+      request.password = this.ruleForm.pass
+      let result = await this.RequestHelper.sendAsync(request)
+      this.dialogFormVisible = false
+      if (result.data.returnCode === '000000') {
+        this.$store.commit('setUserInfo', result.data.data)
+        this.isAuthenticated = true
+        this.$message.success('登录成功')
+        localStorage.setItem('token', result.data.token)
+      } else {
+        this.$message.error(result.data.returnMessage || '密码错误')
+      }
     },
     /* 退出 */
     dialogFormSignout () {
       localStorage.removeItem('token')
       location.href = '/'
     },
-    submitFormSignup () {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:8888/signup',
-        data: {
-          username: this.ruleForm.user,
-          nickname: this.ruleForm.nickname,
-          email: this.ruleForm.email,
-          password: this.ruleForm.pass
-        }
-      }).then(res => {
-        this.dialogRegisterVisible = false
-        console.log(res)
-        if (res.data.returnCode === '000000') {
-          this.$notify({ title: '成功', message: '注册成功', type: 'success' })
-          setTimeout(() => {
-            location.href = '/'
-          }, 1500)
-        } else {
-          this.$message.error(res.data.returnMessage)
-        }
-      })
+    /* 注册 */
+    async submitFormSignup () {
+      let request = new C004()
+      request.username = this.ruleForm.user
+      request.nickname = this.ruleForm.nickname
+      request.email = this.ruleForm.email
+      request.password = this.ruleForm.pass
+      let result = await this.RequestHelper.sendAsync(request)
+      this.dialogRegisterVisible = false
+      if (result.data.returnCode === '000000') {
+        this.$notify({ title: '成功', message: '注册成功', type: 'success' })
+        setTimeout(() => {
+          location.href = '/'
+        }, 1500)
+      } else {
+        this.$message.error(result.data.returnMessage)
+      }
     },
     onCloseSign () {
       this.ruleForm.user = ''

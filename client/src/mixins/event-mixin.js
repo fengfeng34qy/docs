@@ -1,6 +1,7 @@
 export default {
   created () {
     if (this.$options.events) {
+      console.log(this.$options)
       Object.keys(this.$options.events).forEach(key => {
         let handler = this.$options.events[key]
         if (typeof handler === 'string') {

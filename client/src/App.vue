@@ -1,19 +1,26 @@
 <template>
   <div id="app">
+    <!-- <yyl-npm-practice :propData="propData"></yyl-npm-practice> -->
     <router-view/>
   </div>
 </template>
 
 <script>
+// import des from './utils/des'
 
 export default {
   name: 'App',
   data () {
-    return {}
+    return {
+      propData: '11111111111111111111'
+    }
   },
   components: {},
   computed: {},
-  mounted () {},
+  mounted () {
+    // let pwd = '12323434'
+    // des.mac(pwd, '4BBA984C4EACFF98')
+  },
   methods: {}
 }
 </script>

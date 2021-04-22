@@ -9,7 +9,7 @@
           </el-input>
         </div>
         <div class="mark-box">
-          <el-select v-model="language" placeholder="请选择分类">
+          <el-select v-model="language" @change="onModuleChange" placeholder="请选择分类">
             <el-option
               v-for="item in options"
               :key="item.name"
@@ -69,7 +69,7 @@
 
 <script>
 import toolbars from '../config/toolbars'
-import axios from 'axios'
+import C006 from '../messages/C006'
 
 export default {
   name: 'CreateArticle',
@@ -78,6 +78,7 @@ export default {
       options: [],
       title: '',
       language: '',
+      tags: [],
       tag: '',
       mode: false,
       value: '',
@@ -96,35 +97,48 @@ export default {
     //   console.log(this.$store.state.languages)
     //   return this.$store.state.languages
     // },
-    tags () {
-      return this.$route.params.tag
-    }
+    // tags () {
+    //   return this.$route.params.tag
+    // }
   },
   methods: {
-    onSave (value) {
-      axios({
-        method: "POST",
-        url: 'http://localhost:8888/auth/addArticle',
-        headers: {'content-type': 'application/json'},
-        data: {
-          author: (this.$store.state.userInfo && this.$store.state.userInfo.username) ? this.$store.state.userInfo.username : "",
-          module: this.language,
-          content: value,
-          title: this.title,
-          tag: this.tag.replace(/\s/g, ''),
-          token: localStorage.getItem('token')
+    // 分类change事件
+    onModuleChange (e) {
+      let languages = this.$route.params.languages
+      let tag = ''
+      let tags = [{label: '全部', value: '全部'}]
+      // 清空选中的标签
+      this.tag = ''
+      for (let i = 0; i < languages.length; i++) {
+        if (languages[i].language === this.language) {
+          tag = languages[i].tag.split(',')
         }
-      }).then(res => {
-        console.log(res)
-        if (res.data.returnCode === '000000') {
-          // this.$store.commit('setUserInfo', res.data.data)
-          // localStorage.setItem('token', res.data.token)
-          this.$notify({title: '创建成功', message: '', type: 'success'})
-        } else {
-          // this.$message.error(res.data.returnMessage || '未知错误')
-          this.$notify({title: '警告', message: res.data.returnMessage, type: 'warning'})
+      }
+      for (let j = 0; j < tag.length; j++) {
+        let obj = {
+          label: tag[j],
+          value: tag[j]
         }
-      })
+        tags.push(obj)
+      }
+      this.tags = tags
+    },
+    // 创建文章页面 - 保存
+    async onSave (value) {
+      let request = new C006()
+      request.author = (this.$store.state.userInfo && this.$store.state.userInfo.username) ? this.$store.state.userInfo.username : ""
+      request.module = this.language
+      request.content = value
+      request.title = this.title
+      request.tag = this.tag.replace(/\s/g, '')
+      request.token = localStorage.getItem('token')
+      let result = await this.RequestHelper.sendAsync(request)
+      if (result.data.returnCode === '000000') {
+        this.$notify({title: '创建成功', message: '', type: 'success'})
+      } else {
+        // this.$message.error(res.data.returnMessage || '未知错误')
+        this.$notify({title: '警告', message: result.data.returnMessage, type: 'warning'})
+      }
     }
   }
 }

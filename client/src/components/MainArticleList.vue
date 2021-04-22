@@ -17,18 +17,27 @@
       </el-tabs>
     </div>
     <div class="article-list-wrap">
-      <div class="flex article-list-box pointer" justify-content="space-between" align="left" v-for="(item, index) in articles" :key="index" :title="item.title + ' -- ' + '标签:' + item.tag + ' -- ' + '作者:' + item.author" @click="change(item)">
-        <div class="flex" justify-content="flex-start" style="width:100%;">
-          <div align="right" align-items="center" style="width:15%;font-size:14px;">{{item.createtime | timestampFormet}}</div>
-          <div class="ellipsis article-title" align-items="center" style="width:70%;">{{item.title}}</div>
-          <div class="article-tag-box"><el-tag type="warning" class="article-tag-item" style="width:100%;text-align:center;">{{item.tag}}</el-tag></div>
+      <div v-if="articles.length > 0">
+        <div class="flex article-list-box pointer" justify-content="space-between" align="left"
+          v-for="(item, index) in articles"
+          :key="index"
+          :title="item.title + ' -- ' + '标签:' + item.tag + ' -- ' + '作者:' + item.author" @click="change(item)"
+        >
+          <div class="flex" justify-content="flex-start" style="width:100%;">
+            <div align="right" align-items="center" style="width:15%;font-size:14px;">{{item.createtime | timestampFormet}}</div>
+            <div class="ellipsis article-title" align-items="center" style="width:70%;">{{item.title}}</div>
+            <div class="article-tag-box"><el-tag type="warning" class="article-tag-item" style="width:100%;text-align:center;">{{item.tag}}</el-tag></div>
+          </div>
+          <div><i class="el-icon-arrow-right"></i></div>
         </div>
-        <div><i class="el-icon-arrow-right"></i></div>
+      </div>
+      <div v-else>
+        <div>暂无数据</div>
       </div>
     </div>
     <div class="author-wrap">
       <div>作者：孙锋锋</div>
-      <div>就职于赞同科技</div>
+      <div>目前就职于赞同科技</div>
     </div>
     <!-- <div>
       <el-pagination
@@ -43,14 +52,16 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import C002 from '../messages/C002'
+import basicPage from '../common/mixins/basic-page'
 
 export default {
   name: 'MainArticleList',
+  mixins: [basicPage],
   data () {
     return {
       languages: [],
-      Articles: [], // 文章列表
+      // Articles: [], // 文章列表
       articles: [], // 文章列表
       total: 0, // 文章总数
       Tags: [], // 标签列表
@@ -64,45 +75,106 @@ export default {
     pageSize: Number
   },
   computed: {
-    // Tags () {
-    //   return this.$store.state.tags
-    // },
+    tag () {
+      return this.$store.state.tag
+    },
     IsLogin () {
       return !(this.$store.state.userInfo.username)
     }
   },
-  mounted () {
-    axios({
-      method: "POST",
-      url: 'http://localhost:8888/home',
-      headers: {'content-type': 'application/json'},
-      data: {}
-    }).then(res => {
-      console.log(res)
-      if (res.data.returnCode === '000000') {
-        if (res.data.data.languages.length > 0) {
-          this.languages = res.data.data.languages // 保留nav,创建文章页面需要用到
-          this.Tags = this.getTags(this.languages) // 获取tags
+  created () {
+    console.log('添加事件...')
+    this.$EventManager.$on('onNavClickEvent', this.onNavClick)
+    this.$EventManager.$on("onArticleChangeEvent", this.onArticleChange)
+  },
+  async mounted () {
+    if (this.session.Customer.articles.length > 0) {
+      console.log('session===', this.session)
+      // session存在
+
+      // 设置nav导航
+      let navChangeEventArgs = {
+        language: this.session.Customer.languages,
+        activeIndex: this.session.Customer.language
+      }
+      this.$EventManager.$emit("onNavChangeEvent", navChangeEventArgs)
+
+      // 设置标签
+      this.Tags = this.getTags(this.session.Customer.language) // 获取tags
+      console.log('Tags', this.Tags)
+
+      // 设置当前激活标签
+      this.currentTag = this.session.Customer.tag
+
+      // 设置文章列表
+      let m = this.session.Customer.language
+      let t = this.session.Customer.tag
+      let articles = this.HomeHelper.getArticle(m, t)
+      this.$EventManager.$emit('onArticleChangeEvent', articles)
+
+      // 设置文章显示内容
+      let artItem = {
+        id: this.session.Customer.articleId,
+        content: this.session.Customer.content
+      }
+      this.$emit('change-editor', artItem)
+    } else {
+      // session不存在,加载sessoin数据...
+      let request = new C002()
+      let result = await this.RequestHelper.sendAsync(request)
+      if (result.data.returnCode === '000000') {
+        if (result.data.data.languages.length > 0) {
+          // session赋值
+          this.session.Customer.articles = result.data.data.articles
+          this.session.Customer.languages = result.data.data.languages
+          this.session.Customer.language = result.data.data.languages[0].language
+          this.session.Customer.tags = result.data.data.languages[0].tag
+          this.session.Customer.articleId = ''
+          this.session.Customer.tag = '全部'
+          console.log('session', this.session)
+
+          this.languages = result.data.data.languages // 保留nav,创建文章页面需要用到
+
+          // 设置nav导航
+          let navChangeEventArgs = {
+            language: result.data.data.languages,
+            activeIndex: result.data.data.languages[0].language
+          }
+          this.$EventManager.$emit("onNavChangeEvent", navChangeEventArgs)
+
+          // 设置标签
+          this.Tags = this.getTags(this.session.Customer.language) // 获取tags
         }
-        if (res.data.data.articles && res.data.data.articles.length > 0) {
-          let atc = res.data.data.articles
-          let result = []
-          let fenlei = atc[0].module
+
+        if (result.data.data.articles && result.data.data.articles.length > 0) {
+          let atc = result.data.data.articles
+          let arr = []
+          let fenlei = result.data.data.languages[0].language
           for (let i = 0; i < atc.length; i++) {
             if (atc[i].module === fenlei) {
-              result.push(atc[i])
+              arr.push(atc[i])
             }
           }
-          this.total = result.length // 总条数
-          this.Articles = JSON.parse(JSON.stringify(result)) // 文章列表 - 不变
-          this.articles = JSON.parse(JSON.stringify(result)) // 文章列表
+          this.total = arr.length // 总条数
+          this.Articles = JSON.parse(JSON.stringify(arr)) // 文章列表
+          this.articles = JSON.parse(JSON.stringify(arr)) // 文章列表
         }
       }
-    })
+    }
   },
   methods: {
-    getTags (languages) {
-      let tag = languages[0].tag
+    getTags (language) {
+      let tag = ''
+      let languages = this.session.Customer.languages
+      if (language) {
+        for (let i = 0; i < languages.length; i++) {
+          if (languages[i].name === language) {
+            tag = languages[i].tag
+          }
+        }
+      } else {
+        tag = languages[0].tag
+      }
       let tmpResult = tag.split(',')
       let result = []
       result.push({
@@ -117,6 +189,7 @@ export default {
       }
       return result
     },
+    // 点击创建按钮，通过路由跳转创建文章页面
     onCreate () {
       let params = {
         tag: this.Tags,
@@ -124,30 +197,35 @@ export default {
       }
       this.$router.push({ path: '/create/createArticle', name: 'CreateArticle', params })
     },
-    change (content) {
-      this.$emit('change-editor', content)
+    change (item) {
+      // 当前文章id == session.Customer.articleId
+      if (this.session.Customer.articleId === item.id) return
+
+      this.session.Customer.articleId = item.id
+      this.session.Customer.content = item.content
+      this.$store.commit('setArticleId', item.id)
+
+      console.log('文章id: ' + item.id)
+
+      this.$emit('change-editor', item)
     },
     // 点击标签事件
     tabClick (e) {
-      console.log(this.currentTag)
-      if (this.currentTag === '全部') {
-        this.articles = this.Articles
-      } else {
-        this.articles = this.Articles.filter((item) => {
-          return item.tag === this.currentTag
-        })
-      }
+      // 当前标签 == session.Customer.tag
+      if (this.session.Customer.tag === this.currentTag) return
+
+      console.log('点击了标签>>>', this.currentTag)
+      let m = this.session.Customer.language
+      let t = this.currentTag
+      this.articles = this.HomeHelper.getArticle(m, t, 'tag')
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}:${this.currentPage}`)
       this.$emit('pagination-change', {currentPage: val, tag: this.value})
     },
-    fn () {
-      this.value = 'all'
-    },
+    // 设置文章列表下面的标签
     setTags (tags) {
       let tmpResult = tags.split(',')
       let result = []
@@ -162,8 +240,25 @@ export default {
         result.push(obj)
       }
       this.Tags = result
-      this.currentTag = '全部'
-      this.articles = this.Articles
+      this.session.Customer.tags = result
+      // this.articles = this.Articles
+    },
+    onNavClick (data) {
+      this.$nextTick(() => {
+        // 监听导航点击事件
+        console.log('触发监听事件 - onNavClickEvent')
+        this.currentTag = '全部'
+        this.articles = data
+      })
+    },
+    onArticleChange (data) {
+      console.log('触发监听事件 - onArticleChangeEvent')
+      this.articles = data
+    },
+    onClose () {
+      console.log('移除事件...')
+      this.$EventManager.$off("onNavClickEvent")
+      this.$EventManager.$off("onArticleChangeEvent")
     }
   }
 }

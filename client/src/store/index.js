@@ -7,11 +7,13 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    tag: '全部',
     userInfo: {},
     articleList: [],
     languages: [],
     tags: [],
-    activeIndex: ''
+    activeIndex: '',
+    articleId: ''
   },
   getters,
   mutations: {
@@ -26,6 +28,12 @@ const store = new Vuex.Store({
     },
     setActiveIndex (state, data) {
       state.activeIndex = data
+    },
+    setArticleId (state, articleId) {
+      state.articleId = articleId
+    },
+    setTag (state, tag) {
+      state.tag = tag
     },
     setTags (state, data) {
       let tmpResult = data.split(',')

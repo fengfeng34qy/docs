@@ -85,4 +85,21 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default {
+  async sendAsync (request) {
+    return new Promise(function (resolve, reject) {
+      console.log('<<<<<<<<<<<<<<<<<上送报文>>>> %c' + request.url, 'color:#0DBCBC;font-weight:bold;border:1px solid #000;')
+      console.log(request)
+      service({
+        method: request.method || "POST",
+        url: request.url || "",
+        data: request
+      }).then((res) => {
+        console.log('<<<<<<<<<<<<<<<<<接收报文>>>> %c' + request.url, 'color:green;font-weight:bold;border:1px solid #000;')
+        console.log(res)
+        resolve(res)
+      })
+    })
+  }
+}
+// export default service

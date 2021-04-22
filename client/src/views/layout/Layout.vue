@@ -1,13 +1,12 @@
 <template>
   <div class="layout">
     <navbar ref="navbar" @nav-click="navOnClick" />
-    <app-main ref="appMain" :articles="Articles" :total="total" :currentTag="currentTag" :pageSize="pageSize" @article-change="articleChange" @tag-change="tagChange" @pagination-change="paginationChange" />
+    <app-main ref="appMain" :articles="Articles" :total="total" :pageSize="pageSize" @article-change="articleChange" @tag-change="tagChange" @pagination-change="paginationChange" />
   </div>
 </template>
 <script>
 import Navbar from './components/navbar'
 import { AppMain } from './components'
-// import axios from 'axios'
 
 export default {
   name: 'layout',
@@ -17,8 +16,7 @@ export default {
       pageSize: 10,
       ArticlesAll: [],
       Articles: [],
-      ArticlesItem: [],
-      currentTag: 'all'
+      ArticlesItem: []
     }
   },
   components: {
@@ -26,9 +24,6 @@ export default {
     AppMain
   },
   computed: {
-    // languages () {
-    //   return this.$store.state.languages
-    // },
     activeIndex () {
       return this.$store.state.activeIndex
     }
@@ -38,9 +33,8 @@ export default {
   methods: {
     navOnClick (key) {
       console.log('点击了导航', key)
-      // this.$store.commit('setTags', key.tag)
       this.$refs.appMain.setTags(key.tag)
-      this.$refs.appMain.fn()
+      // this.$refs.appMain.setSideArticle(key.language)
     },
     articleChange (data) {
       this.articles = data

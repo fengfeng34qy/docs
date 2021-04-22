@@ -2,7 +2,7 @@
   <div class="app-main">
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="cachedViews">
-            <router-view ref="appMain" :key="key" :total="total" :pageSize="pageSize" :currentTag="currentTag" :articles="articles" @article-change="articleChange" @tag-change="tagChange" @pagination-change="paginationChange" />
+            <router-view ref="appMain" :key="key" :total="total" :pageSize="pageSize" :articles="articles" @article-change="articleChange" @tag-change="tagChange" @pagination-change="paginationChange" />
         </keep-alive>
       </transition>
   </div>
@@ -17,8 +17,7 @@ export default {
   props: {
     articles: Array,
     total: Number,
-    pageSize: Number,
-    currentTag: String
+    pageSize: Number
   },
   computed: {
     cachedViews () {
@@ -29,14 +28,13 @@ export default {
     }
   },
   methods: {
-    fn () {
-      this.$refs.appMain.fn()
+    setSideArticle (language) {
+      this.$refs.appMain.setSideArticle(language)
     },
     setTags (tags) {
       this.$refs.appMain.setTags(tags)
     },
     articleChange (data) {
-      console.log('文章', data)
       this.$emit('article-change', data)
     },
     tagChange (data) {

@@ -35,16 +35,16 @@
 
 /****************单元格宽度******************/
 
-@for $i from 0 to 24 {
+/* @for $i from 0 to 24 {
 	.aui-col-$i { 
     width: calc(1 / 24 * $(i) * 100)% ;
    }
-}
+} */
 
 /****************单元格左偏移距离******************/
 
-@for $i from 1 to 23 {
+/* @for $i from 1 to 23 {
 	.aui-col-offset-$i { 
     margin-left: calc(1 / 24 * $(i) * 100)%;
    }
-}
+} */

@@ -15,6 +15,16 @@ module.exports = {
         let token = ''
         let createtime = currentDate
         let updatetime = currentDate
+
+        if (!username) {
+            ctx.response.body = {returnCode: '999999', returnMessage: '"username"字段必输'}
+            return;
+        }
+        if (!password) {
+            ctx.response.body = {returnCode: '999999', returnMessage: '"password"字段必输'}
+            return;
+        }
+
         let sql = `INSERT INTO users (username, nickname, email, password, face, role, token, createtime, updatetime) VALUES ('${username}', '${nickname}', '${email}', '${password}', '${face}', '${role}', '${token}', '${createtime}', '${updatetime}');`
         let data = null
         try {

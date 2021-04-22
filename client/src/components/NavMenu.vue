@@ -32,7 +32,6 @@ export default {
       // return this.languages
     },
     activeIndex () {
-      // return this.$store.state.activeIndex
       if (this.$store.state.languages && this.$store.state.languages.length > 0) {
         return this.$store.state.languages[0].language
       } else {
@@ -44,19 +43,6 @@ export default {
     languages: Array
   },
   mounted () {
-    // console.log(this.languages)
-    // axios({
-    //   method: "POST",
-    //   url: 'http://localhost:8888/getLanguages',
-    //   headers: {'content-type': 'application/json'},
-    //   data: {}
-    // }).then(res => {
-    //   console.log(res)
-    //   if (res.data.data && res.data.data.length > 0) {
-    //     this.$store.commit('setLanguages', res.data.data)
-    //     this.activeIndex = this.$store.state.languages[0].language
-    //   }
-    // })
   },
   methods: {
     handleSelect (key, keyPath) {

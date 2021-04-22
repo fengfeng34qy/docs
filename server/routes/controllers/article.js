@@ -52,23 +52,31 @@ module.exports = {
         let id = body.id
     },
     // 更新文章
-    async updateArticle(ctx) {
+    async updateArticle(ctx, next) {
         let body = ctx.request.body
         if (!await Admin.isAuthenticated(ctx)) {
-            console.log('没有认证通过')
+            console.log('没有认证通过,没有登录')
             return
         }
         let id = body.id
         let content = body.content.replace(/\"/g, "\\\"").replace(/\'/g, "\\\'")
+
+        if (!content) {
+            ctx.response.body = {returnCode: '999999', returnMessage: '"content"字段必输'}
+            return;
+        }
         let sql = `UPDATE articles SET content='${content}' WHERE(id='${id}');`
-        console.log('==========')
-        console.log(sql)
         try {
             await mysql.query(sql)
             ctx.response.body = {returnCode: '000000', returnMessage: '更新成功'}
         } catch (err) {
+            console.log('更新文章失败')
             console.log(err)
             ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
         }
+    },
+    // 测试
+    async test(ctx, next) {
+        await next();
     }
 }
