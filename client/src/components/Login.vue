@@ -6,7 +6,8 @@
       <el-button type="danger" size="mini" @click="dialogRegisterVisible = true">注册</el-button>
     </div>
     <div class="flex" v-else>
-      <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="https://www.sunfengfeng.com/images/face/10.png"></el-avatar>
+      <!-- <el-avatar class="cursor" title="管理员" :size="40" alt="头像" src="https://www.sunfengfeng.com/images/face/10.png"></el-avatar> -->
+      <div style="color:#da4dc2;">您好,{{this.$store.state.userInfo.nickname}}</div>
       <div style="margin:0 6px;">|</div>
       <el-button type="success" size="mini" @click="dialogFormSignout">退出</el-button>
     </div>

@@ -212,6 +212,8 @@ export default {
   height: 240px;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  border-right: 1px solid rgb(204, 204, 204);
 }
 .author-wrap > div {
   width: 100%;

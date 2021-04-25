@@ -334,7 +334,7 @@ export default {
   height: 552px;
   box-sizing: border-box;
   overflow: auto;
-  border: 1px solid #E4E7ED;
+  /* border: 1px solid #E4E7ED; */
   border-top: none;
   /* background: #f5f7fa; */
 }
