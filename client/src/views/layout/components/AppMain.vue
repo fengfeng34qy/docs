@@ -50,5 +50,6 @@ export default {
 .app-main {
   /* padding-top: 60px; */
   box-sizing: border-box;
+  background: #eaecef;
 }
 </style>

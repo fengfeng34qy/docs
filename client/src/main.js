@@ -28,6 +28,7 @@ Vue.use(VueHtml5Editor, html5EditorConfig)
 
 Vue.config.productionTip = false
 
+Vue.prototype.version = Vue.version
 Vue.prototype.$EventManager = new Vue()
 Vue.prototype.session = session // session
 Vue.prototype.RequestHelper = RequestHelper // 通讯工具

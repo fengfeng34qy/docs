@@ -18,10 +18,12 @@
     </div>
     <div class="article-list-wrap">
       <div v-if="articles.length > 0">
-        <div class="flex article-list-box pointer" justify-content="space-between" align="left"
+        <div class="flex article-list-box pointer" :class="{'active': item.id === currentId}" justify-content="space-between" align="left"
           v-for="(item, index) in articles"
           :key="index"
-          :title="item.title + ' -- ' + '标签:' + item.tag + ' -- ' + '作者:' + item.author" @click="change(item)"
+          :title="item.title + ' -- ' + '标签:' + item.tag + ' -- ' + '作者:' + item.author"
+          @click="articleClick(item)"
+          @contextmenu.prevent="openMenu($event, item)"
         >
           <div class="flex" justify-content="flex-start" style="width:100%;">
             <div align="right" align-items="center" style="width:15%;font-size:14px;">{{item.createtime | timestampFormet}}</div>
@@ -30,12 +32,16 @@
           </div>
           <div><i class="el-icon-arrow-right"></i></div>
         </div>
+        <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+          <li @click="handleDelete(rightClickItem)">删除</li>
+        </ul>
       </div>
       <div v-else>
         <div>暂无数据</div>
       </div>
     </div>
     <div class="author-wrap">
+      <div>Vue版本号：{{this.version}}</div>
       <div>作者：孙锋锋</div>
       <div>目前就职于赞同科技</div>
     </div>
@@ -53,13 +59,21 @@
 </template>
 <script>
 import C002 from '../messages/C002'
+import C009 from '../messages/C009'
 import basicPage from '../common/mixins/basic-page'
+import MessageDialog from '../components/dialog/MessageDialog'
+import { Dialog } from 'aui-ss'
 
 export default {
   name: 'MainArticleList',
   mixins: [basicPage],
   data () {
     return {
+      currentId: '',
+      top: 0,
+      left: 0,
+      visible: false,
+      rightClickItem: {},
       languages: [],
       // Articles: [], // 文章列表
       articles: [], // 文章列表
@@ -82,8 +96,17 @@ export default {
       return !(this.$store.state.userInfo.username)
     }
   },
+  watch: {
+    visible (value) {
+      if (value) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
+    }
+  },
   created () {
-    console.log('添加事件...')
+    console.log(this.version)
     this.$EventManager.$on('onNavClickEvent', this.onNavClick)
     this.$EventManager.$on("onArticleChangeEvent", this.onArticleChange)
   },
@@ -197,7 +220,9 @@ export default {
       }
       this.$router.push({ path: '/create/createArticle', name: 'CreateArticle', params })
     },
-    change (item) {
+    // 选择文章
+    articleClick (item) {
+      this.currentId = item.id
       // 当前文章id == session.Customer.articleId
       if (this.session.Customer.articleId === item.id) return
 
@@ -255,8 +280,39 @@ export default {
       console.log('触发监听事件 - onArticleChangeEvent')
       this.articles = data
     },
+    /* 删除 */
+    async handleDelete (item) {
+      let DialogResult = await Dialog.showAwait(MessageDialog, {
+        dialogBoxContentArgs: {
+          message: '确认删除？',
+          btnType: 'okCancel'
+        }
+      })
+      if (DialogResult === 'OK') {
+        let request = new C009()
+        request.id = item.id
+        let result = await this.RequestHelper.sendAsync(request)
+        if (result.data.returnCode === '000000') {
+          // TODO
+        }
+      }
+    },
+    /* 打开右键菜单 */
+    openMenu (e, item) {
+      this.rightClickItem = item
+      let x = e.clientX
+      let y = e.clientY
+
+      this.top = y
+      this.left = x
+
+      this.visible = true
+    },
+    /* 关闭右键菜单 */
+    closeMenu () {
+      this.visible = false
+    },
     onClose () {
-      console.log('移除事件...')
       this.$EventManager.$off("onNavClickEvent")
       this.$EventManager.$off("onArticleChangeEvent")
     }
@@ -288,7 +344,7 @@ export default {
   height: 46px;
 }
 .article-list-box:hover {
-  background: #eaecef;
+  background: rgba(228, 141, 16, 0.5);
 }
 .article-title {
   box-sizing: border-box;
@@ -338,5 +394,33 @@ export default {
 }
 .article-list-wrap::-webkit-scrollbar-track {/*滚动条里面轨道*/
   background: var(--option-scrollbar-track-bg);
+}
+
+.contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 3000;
+  position: fixed;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.contextmenu li {
+  margin: 0;
+  padding: 7px 16px;
+  cursor: pointer;
+}
+
+.contextmenu li:hover {
+  background-color: rgb(3, 125, 243);;
+  color: white;
+}
+.active {
+  background: rgba(228, 141, 16) !important;
 }
 </style>
