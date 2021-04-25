@@ -47,9 +47,22 @@ module.exports = {
         }
     },
     // 删除文章
-    async delArticle(ctx) {
+    async deleteArticle(ctx) {
         let body = ctx.request.body
+        console.log(body)
         let id = body.id
+        if (!id) {
+            ctx.response.body = {returnCode: '999999', returnMessage: 'id 字段必输'}
+            return
+        }
+        let sql = `DELETE FROM articles WHERE(id=${id})`
+        try {
+            data = await mysql.query(sql)
+            console.log(data)
+            ctx.response.body = {returnCode: '000000', data, returnMessage: '删除成功'}
+        } catch (err) {
+            ctx.response.body = {returnCode: err.code, returnMessage: err.sqlMessage, err}
+        }
     },
     // 更新文章
     async updateArticle(ctx, next) {

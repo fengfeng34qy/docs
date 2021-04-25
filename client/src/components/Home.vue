@@ -6,9 +6,16 @@
     </div>
     <el-container>
       <el-main class="main">
-        <div class="flex" align-items="flex-start">
-          <div v-show="showSlider" flex="2" style="width:28%">
+        <div class="flex" align-items="flex-start" style="height:100%;">
+          <div v-show="showSlider" flex="2" style="width:28%;height:100%;display:flex;flex-direction:column;box-sizing:border-box;">
             <MainArticleList ref="mainArticle" :data="articleList" :articles="articles" :total="total"  @create-btn="onCreate" @tag-change="tagChange" @pagination-change="paginationChange" @change-editor="changeEditor"/>
+            <div class="author-wrap">
+              <div>
+                <div>Vue版本号：{{this.version}}</div>
+                <div>作者：孙锋锋</div>
+                <div>目前就职于赞同科技</div>
+              </div>
+            </div>
           </div>
           <div class="editor-box" flex="3" style="width:72%">
             <div v-if="!value">使用教程</div>
@@ -200,5 +207,13 @@ export default {
 }
 .back-btn:hover {
   opacity: 1;
+}
+.author-wrap {
+  height: 240px;
+  display: flex;
+  align-items: center;
+}
+.author-wrap > div {
+  width: 100%;
 }
 </style>

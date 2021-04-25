@@ -29,7 +29,7 @@ router.post('/getArticle', Article.getArticle)
 router.post('/auth/addArticle', Article.addArticle)
 
 // 删除文章
-router.post('/delArticle', Article.delArticle)
+router.post('/deleteArticle', Article.deleteArticle)
 
 // 更新文章
 router.post('/updateArticle', Article.test, Article.updateArticle)

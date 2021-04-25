@@ -40,11 +40,11 @@
         <div>暂无数据</div>
       </div>
     </div>
-    <div class="author-wrap">
+    <!-- <div class="author-wrap">
       <div>Vue版本号：{{this.version}}</div>
       <div>作者：孙锋锋</div>
       <div>目前就职于赞同科技</div>
-    </div>
+    </div> -->
     <!-- <div>
       <el-pagination
         @size-change="handleSizeChange"
@@ -230,8 +230,6 @@ export default {
       this.session.Customer.content = item.content
       this.$store.commit('setArticleId', item.id)
 
-      console.log('文章id: ' + item.id)
-
       this.$emit('change-editor', item)
     },
     // 点击标签事件
@@ -324,6 +322,9 @@ export default {
   padding: 0 10px;
   /* line-height: 2.4; */
   font-size: 18px;
+  height: 100%;
+  border:1px solid rgb(204, 204, 204);
+  box-sizing: border-box;
 }
 .box > div {
   width: 100%;
