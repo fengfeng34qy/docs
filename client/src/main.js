@@ -34,6 +34,8 @@ Vue.prototype.session = session // session
 Vue.prototype.RequestHelper = RequestHelper // 通讯工具
 Vue.prototype.HomeHelper = HomeHelper
 
+console.log(Vue.version)
+
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })

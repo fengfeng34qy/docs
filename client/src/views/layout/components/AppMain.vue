@@ -37,6 +37,9 @@ export default {
     articleChange (data) {
       this.$emit('article-change', data)
     },
+    articleChange2 (item) {
+      this.$refs.appMain.changeEditor(item)
+    },
     tagChange (data) {
       this.$emit('tag-change', data)
     },

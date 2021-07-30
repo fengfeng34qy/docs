@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     isLogin () {
-      return this.$store.state.userInfo.username && this.$store.state.articleId
+      return this.$store.state.userInfo.username && this.$store.state.articleId && this.value
     },
     articleList () {
       return this.$store.state.articleList
@@ -136,6 +136,9 @@ export default {
 
     // 点击某个文章事件触发
     changeEditor (item) {
+      this.session.Customer.articleId = item.id
+      this.session.Customer.content = item.content
+      this.$store.commit('setArticleId', item.id)
       this.articleId = item.id
       this.value = item.content
     },

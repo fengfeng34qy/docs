@@ -49,7 +49,6 @@ module.exports = {
     // 删除文章
     async deleteArticle(ctx) {
         let body = ctx.request.body
-        console.log(body)
         let id = body.id
         if (!id) {
             ctx.response.body = {returnCode: '999999', returnMessage: 'id 字段必输'}

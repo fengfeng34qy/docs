@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="20">
           <div class="flex" justify-content="flex-end">
-            <SearchInput v-show="isShow" />
+            <SearchInput v-show="isShow" @article-change="articleChange1"/>
             <div class="flex" style="margin-left:16px;">
               <el-menu
                 :default-active="activeIndex"
@@ -118,6 +118,10 @@ export default {
         console.log(result)
         this.Languages = result.data.data
       }
+    },
+    articleChange1 (item) {
+      console.log('sff')
+      this.$emit('article-change', item)
     },
     getNavbar () {}
   }

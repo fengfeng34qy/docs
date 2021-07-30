@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <navbar ref="navbar" @nav-click="navOnClick" />
+    <navbar ref="navbar" @nav-click="navOnClick" @article-change="articleChange2"/>
     <app-main ref="appMain" :articles="Articles" :total="total" :pageSize="pageSize" @article-change="articleChange" @tag-change="tagChange" @pagination-change="paginationChange" />
   </div>
 </template>
@@ -32,17 +32,17 @@ export default {
   },
   methods: {
     navOnClick (key) {
-      console.log('点击了导航', key)
       this.$refs.appMain.setTags(key.tag)
-      // this.$refs.appMain.setSideArticle(key.language)
     },
     articleChange (data) {
-      this.articles = data
-      console.log('成功了.', data)
+      // this.articles = data
+      // this.$refs.appMain.articleChange(data)
+    },
+    articleChange2 (data) {
+      this.$refs.appMain.articleChange2(data)
     },
     // 点击了标签
     tagChange (tag) {
-      console.log('接收到标签变更.', tag)
       if (tag === 'all') {
         this.Articles = JSON.parse(JSON.stringify(this.ArticlesAll))
       } else {
@@ -55,15 +55,10 @@ export default {
         this.Articles = result
       }
     },
-    navbar () {
-      // this.$refs
-    },
     // 点击了分页
     paginationChange (data) {
-      console.log('点击了分页', data)
       let list = JSON.parse(JSON.stringify(this.Articles))
       this.ArticlesItem = list.splice((data.currentPage - 1) * this.pageSize, 10)
-      console.log(this.ArticlesItem)
     }
   }
 }

@@ -98,8 +98,11 @@ export default {
       this.$store.commit('setUserInfo', result.data.data)
       localStorage.setItem('token', result.data.token)
       this.isAuthenticated = true
+      // 设置登录状态
+      this.session.Client.isAuthenticated = true
     } else {
-      // this.$message.error(res.data.returnMessage || '未知错误')
+      // 设置登录状态
+      this.session.Client.isAuthenticated = false
     }
   },
   methods: {
@@ -113,8 +116,11 @@ export default {
       if (result.data.returnCode === '000000') {
         this.$store.commit('setUserInfo', result.data.data)
         this.isAuthenticated = true
-        this.$message.success('登录成功')
+        // 设置登录状态
+        this.session.Client.isAuthenticated = true
         localStorage.setItem('token', result.data.token)
+        this.session.Customer.token = result.data.token
+        this.$message.success('登录成功')
       } else {
         this.$message.error(result.data.returnMessage || '密码错误')
       }

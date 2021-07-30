@@ -1,8 +1,9 @@
 const Koa = require('koa')
-// const fs = require('fs')
+const fs = require('fs')
 const cors = require('koa2-cors')
 const bodyParser = require('koa-bodyparser')
 var router = require('./routes/router')
+const KoaStatic = require('koa-static');
 const session = require('koa-session');   // 导入koa-session
 
 const session_signed_key = ["some secret hurr"];
@@ -21,6 +22,9 @@ const app = new Koa()
 app.keys = session_signed_key;
 app.use(session(session_config, app));
 
+// 静态资源
+app.use(KoaStatic('./dist'));
+
 // app.use(koaBody({ multipart: true }));
 app.use(bodyParser({
     strict:false,
@@ -35,10 +39,9 @@ app.use(cors())
 app.use(router.routes())
 
 app.use(async ctx => {
-    console.log(ctx.session)
     ctx.response.type = 'html'
-    // ctx.response.body = fs.createReadStream('./home/index.html')
-    ctx.body = 'hello word'
+    ctx.response.body = fs.createReadStream('./dist/index.html')
+    // ctx.body = 'hello word'
 })
 
 app.listen(8888)

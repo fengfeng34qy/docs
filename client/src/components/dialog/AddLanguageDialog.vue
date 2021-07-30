@@ -4,7 +4,7 @@
     <el-input class="input-item" placeholder="请输入内容" maxlength="12" v-model="language">
       <template slot="prepend">语言</template>
     </el-input>
-    <el-input class="input-item" placeholder="逗号分隔" v-model="tag">
+    <el-input class="input-item" placeholder="逗号分隔。 例如 【 js,css,html 】" v-model="tag">
       <template slot="prepend">标签</template>
     </el-input>
     <div class="flex message-dialog-btn" justify-content="center">

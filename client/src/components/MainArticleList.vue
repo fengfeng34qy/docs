@@ -34,27 +34,13 @@
         </div>
         <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
           <li @click="handleDelete(rightClickItem)">删除</li>
+          <li @click="handleEditor(rightClickItem)">编辑</li>
         </ul>
       </div>
       <div v-else>
         <div>暂无数据</div>
       </div>
     </div>
-    <!-- <div class="author-wrap">
-      <div>Vue版本号：{{this.version}}</div>
-      <div>作者：孙锋锋</div>
-      <div>目前就职于赞同科技</div>
-    </div> -->
-    <!-- <div>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        layout="prev, pager, next"
-        :page-size="pageSize"
-        :total="total">
-      </el-pagination>
-    </div> -->
   </div>
 </template>
 <script>
@@ -84,8 +70,6 @@ export default {
     }
   },
   props: {
-    // articles: Array,
-    // total: Number,
     pageSize: Number
   },
   computed: {
@@ -106,7 +90,6 @@ export default {
     }
   },
   created () {
-    console.log(this.version)
     this.$EventManager.$on('onNavClickEvent', this.onNavClick)
     this.$EventManager.$on("onArticleChangeEvent", this.onArticleChange)
   },
@@ -154,6 +137,9 @@ export default {
           this.session.Customer.tags = result.data.data.languages[0].tag
           this.session.Customer.articleId = ''
           this.session.Customer.tag = '全部'
+
+          this.session.Customer.token = localStorage.getItem('token')
+
           console.log('session', this.session)
 
           this.languages = result.data.data.languages // 保留nav,创建文章页面需要用到
@@ -222,13 +208,15 @@ export default {
     },
     // 选择文章
     articleClick (item) {
+      // location.hash = 'dd=' + item.id
+      // return
       this.currentId = item.id
       // 当前文章id == session.Customer.articleId
       if (this.session.Customer.articleId === item.id) return
 
-      this.session.Customer.articleId = item.id
-      this.session.Customer.content = item.content
-      this.$store.commit('setArticleId', item.id)
+      // this.session.Customer.articleId = item.id
+      // this.session.Customer.content = item.content
+      // this.$store.commit('setArticleId', item.id)
 
       this.$emit('change-editor', item)
     },
@@ -286,14 +274,23 @@ export default {
           btnType: 'okCancel'
         }
       })
-      if (DialogResult === 'OK') {
+      if (DialogResult.result === 'OK') {
         let request = new C009()
         request.id = item.id
+        request.isAuthenticated = this.session.Client.isAuthenticated
+        request.token = this.session.Customer.token
+        request.userInfo = this.$store.state.userInfo
         let result = await this.RequestHelper.sendAsync(request)
         if (result.data.returnCode === '000000') {
-          // TODO
+          this.$notify({title: '删除成功', message: '', type: 'success'})
+        } else {
+          this.$notify({title: '删除失败', message: result.data.returnMessage, type: 'error'})
         }
       }
+    },
+    /* 编辑 */
+    async handleEditor () {
+      this.$notify({title: '功能未实现！', message: '', type: 'error'})
     },
     /* 打开右键菜单 */
     openMenu (e, item) {
@@ -330,13 +327,9 @@ export default {
   width: 100%;
 }
 .article-list-wrap {
-  /* min-height: 460px; */
-  height: 552px;
   box-sizing: border-box;
   overflow: auto;
-  /* border: 1px solid #E4E7ED; */
   border-top: none;
-  /* background: #f5f7fa; */
 }
 .article-list-box {
   /* border-bottom: 1px solid #ccc; */
