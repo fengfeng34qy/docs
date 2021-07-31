@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="editor-box" flex="3" style="width:72%">
-            <div v-if="!value">使用教程。。。，。。。</div>
+            <div v-if="!value">使用教程。。。，。。。。1</div>
             <div v-else>
               <MainEditor
                 :value="value"
