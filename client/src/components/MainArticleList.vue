@@ -28,7 +28,7 @@
           <div class="flex" justify-content="flex-start" style="width:100%;">
             <div align="right" align-items="center" style="width:15%;font-size:14px;">{{item.createtime | timestampFormet}}</div>
             <div class="ellipsis article-title" align-items="center" style="width:70%;">{{item.title}}</div>
-            <div class="article-tag-box"><el-tag type="warning" class="article-tag-item" style="width:100%;text-align:center;">{{item.tag}}</el-tag></div>
+            <div class="flex article-tag-box"><el-tag type="warning" class="article-tag-item" style="width:100%;text-align:center;">{{item.tag}}</el-tag></div>
           </div>
           <div><i class="el-icon-arrow-right"></i></div>
         </div>
@@ -268,9 +268,11 @@ export default {
     },
     /* 删除 */
     async handleDelete (item) {
+      console.log(item)
       let DialogResult = await Dialog.showAwait(MessageDialog, {
         dialogBoxContentArgs: {
-          message: '确认删除？',
+          message: `确认删除？`,
+          content: item.title,
           btnType: 'okCancel'
         }
       })
@@ -283,6 +285,9 @@ export default {
         let result = await this.RequestHelper.sendAsync(request)
         if (result.data.returnCode === '000000') {
           this.$notify({title: '删除成功', message: '', type: 'success'})
+          setTimeout(() => {
+            location.reload()
+          }, 2000)
         } else {
           this.$notify({title: '删除失败', message: result.data.returnMessage, type: 'error'})
         }
@@ -290,7 +295,12 @@ export default {
     },
     /* 编辑 */
     async handleEditor () {
-      this.$notify({title: '功能未实现！', message: '', type: 'error'})
+      // this.$notify({title: '开发小哥哥偷懒了!', message: '', type: 'error'})
+      this.$message({
+        showClose: true,
+        message: '开发小哥哥偷懒了!',
+        type: 'warning'
+      })
     },
     /* 打开右键菜单 */
     openMenu (e, item) {

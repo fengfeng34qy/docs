@@ -1,6 +1,7 @@
 <template>
   <div class="message-dialog">
     <div style="text-align:center;font-size:24px;">{{this.dialogBoxContentArgs.message}}</div>
+    <div style="text-align:center;">{{this.dialogBoxContentArgs.content}}</div>
     <div class="flex message-dialog-btn" justify-content="center">
        <div class="flex" justify-content="space-between" style="width:60%;">
          <el-button

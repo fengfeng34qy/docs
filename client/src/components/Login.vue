@@ -36,7 +36,7 @@
         <el-form-item label="密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off" :minlength="3" :maxlength="12"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" :minlength="3" :maxlength="36" autocomplete="on"></el-input>
         </el-form-item>
         <el-form-item>
@@ -56,19 +56,15 @@ import crypto from '../common/utils/crypto-js'
 export default {
   name: 'Login',
   data () {
-    var checkUser = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('用户名不能为空'))
-      } else {
-        callback()
+    function checkNull (str, message) {
+      var checkNull = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(message))
+        } else {
+          callback()
+        }
       }
-    }
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        callback()
-      }
+      return checkNull
     }
     return {
       isAuthenticated: false,
@@ -81,11 +77,14 @@ export default {
         email: ''
       },
       rules: {
-        pass: [
-          { validator: validatePass, trigger: 'blur' }
-        ],
         user: [
-          { validator: checkUser, trigger: 'blur' }
+          { validator: checkNull('user', '请输入用户名'), trigger: 'blur' }
+        ],
+        pass: [
+          { validator: checkNull('pass', '请输入密码'), trigger: 'blur' }
+        ],
+        email: [
+          { validator: checkNull('email', '请输入邮箱'), trigger: 'blur' }
         ]
       }
     }
