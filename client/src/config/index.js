@@ -1,6 +1,6 @@
 var config = {
-  url: 'localhost',
+  url: '182.61.56.188',
   port: '8888',
-  protocol: 'http'
+  protocol: 'https'
 }
 export default config

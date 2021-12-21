@@ -19,7 +19,13 @@ import './style/theme-aui-ss.css'
 import 'mavon-editor/dist/css/index.css'
 import './style/lib/font-awesome-4.7.0/css/font-awesome.css'
 import './config/index'
+
+// iview组件库 官方地址：https://www.iviewui.com/
+import iview from 'iview/iview'
+import 'iview/styles/iview.css'
+
 console.log(process.env)
+Vue.use(iview)
 Vue.use(AUISS)
 Vue.use(Main)
 Vue.use(ElementUI)
