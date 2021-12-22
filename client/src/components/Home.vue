@@ -18,13 +18,18 @@
             </div>
           </div>
           <div class="editor-box" flex="3" style="width:72%">
-            <div v-if="!value">使用教程----012</div>
+            <div v-if="!value && !this.subfield">
+              <div class="flex box_zsm">
+                <img src="../../static/images/zsm.jpg" alt="">
+              </div>
+            </div>
             <div v-else>
               <MainEditor
                 :value="value"
                 :subfield="subfield"
                 :toolbarsFlag="toolbarsFlag"
                 :navigation="navFlg"
+                @onSave="onSave"
                 @mavon-editor-change="mavonEditorChange"
               />
             </div>
@@ -108,23 +113,39 @@ export default {
     submitForm () {
       console.log('a')
     },
+
+    // 编辑保存按钮
     async onEditor () {
       if (this.subfield) {
-        let request = new C007()
-        request.id = this.articleId
-        request.content = this.value
-        request.token = localStorage.getItem('token')
-        let result = await this.RequestHelper.sendAsync(request)
+        let result = await this.saveAsync(this.value)
         if (result.data.returnCode === '000000') {
           this.subfield = false
           this.navFlg = false
         } else {
           this.$message.error(result.data.returnMessage)
-          // this.$router.push({path: '/create'})
         }
       } else {
         this.subfield = true
       }
+    },
+
+    // 保存
+    async onSave (data) {
+      let result = await this.saveAsync(data)
+      if (result.data.returnCode === '000000') {
+        this.$notify({title: '保存成功', message: '', type: 'success'})
+      } else {
+        this.$message.error(result.data.returnMessage)
+      }
+    },
+    // 保存接口
+    async saveAsync (data) {
+      let request = new C007()
+      request.id = this.articleId
+      request.content = data
+      request.token = localStorage.getItem('token')
+      let result = await this.RequestHelper.sendAsync(request)
+      return result
     },
     // 返回按钮
     onBack () {
@@ -220,5 +241,13 @@ export default {
 }
 .author-wrap > div {
   width: 100%;
+}
+.box_zsm {
+  width: 380px;
+  margin: 60px auto;
+}
+.box_zsm img {
+  width: 100%;
+  height: 100%;
 }
 </style>

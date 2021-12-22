@@ -73,6 +73,7 @@ export default {
   mounted () {},
   methods: {
     onSave (data) {
+      this.$emit('onSave', data)
     },
     onchange (val) {
       this.$emit('mavon-editor-change', val)
